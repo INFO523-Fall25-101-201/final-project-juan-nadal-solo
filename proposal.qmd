@@ -1,11 +1,11 @@
 ---
-title: "Proposal title"
-subtitle: "Proposal"
-author: 
-  - name: "Team Name - Team member 1, Team member 2,..."
+title: "Are Movie Stars Worth Their Premiums?"
+subtitle: "Project Proposal"
+author:
+  - name: "Juan Nadal"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "Project description"
+description: "Analyzing whether expensive movie stars justify their pay premiums compared to other success factors using 1M+ movies from TMDB and IMDb datasets"
 format:
   html:
     code-tools: true
@@ -23,6 +23,8 @@ jupyter: python3
 #| label: load-pkgs
 #| message: false
 import numpy as np
+
+
 ```
 
 ## Dataset
@@ -32,14 +34,44 @@ import numpy as np
 #| message: false
 ```
 
-A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
+This project utilizes three comprehensive Kaggle datasets totaling approximately 770 MB:
 
-Make sure to load the data and use inline code for some of this information.
+1. **TMDB Movies Daily Updates** (`alanvourch/tmdb-movies-daily-updates`): 960,000+ movies with regularly updated metadata including cast, crew, budgets, revenues, and release information (295.6 MB)
+
+2. **The Movies Dataset** (`rounakbanik/the-movies-dataset`): 45,000 movies with 26 million user ratings, providing detailed audience reception data and critical assessments (238.86 MB)
+
+3. **TMDB Movies Dataset 2023** (`asaniczka/tmdb-movies-dataset-2023-930k-movies`): 1 million movies with comprehensive feature data including genres, production companies, and streaming platform availability (238 MB)
+
+These datasets were chosen because they provide the scale and diversity necessary to analyze movie success factors across different eras, genres, and markets. The combination of financial data (budgets, revenues), audience metrics (ratings, reviews), and metadata (cast, genres, platforms) enables a multi-faceted analysis of what truly drives movie success.
 
 ## Questions
 
-The two questions you want to answer.
+1. **Do expensive movie stars justify their pay premiums?** Specifically, does the presence of high-profile actors correlate with higher box office revenue and better audience ratings when controlling for other factors like budget, genre, and release timing?
+
+2. **Which factors most reliably predict movie success?** Between star power, genre, release timing (summer blockbusters vs. other periods), sequel status, and streaming platform presence, which variables have the strongest predictive power for financial and critical success?
 
 ## Analysis plan
 
--   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+**Question 1: Star Power Premium Analysis**
+
+- **Variables involved**: Actor prominence scores, cast budgets, box office revenue, profitability ratios, audience ratings
+- **Variables to create**:
+  - Star power index (combining cast prominence, awards history, previous box office performance)
+  - Premium ratio (actual revenue vs. predicted revenue based on non-star factors)
+  - Cost-effectiveness metric (revenue per dollar spent on cast)
+- **Approach**: Multiple regression analysis comparing movies with high-profile casts vs. comparable films with lesser-known actors, controlling for budget, genre, and release timing
+
+**Question 2: Predictive Modeling of Success**
+
+- **Variables involved**: Genre classifications, release month/season, sequel/franchise status, streaming platform availability, budget tiers, cast prominence, production company size
+- **Variables to create**:
+  - Seasonal release categories (summer blockbuster, holiday, off-season)
+  - Franchise indicator (sequel vs. original)
+  - Platform diversity score (number of streaming services)
+  - Success metrics (both financial and critical)
+- **External data**: Potentially merge in social media metrics or awards data if available
+- **Approach**:
+  - Feature importance analysis using random forests or gradient boosting
+  - Comparative statistical analysis across different success factors
+  - Social network analysis of actor collaborations to measure celebrity impact
+  - Interactive visualizations showing how success factors have evolved over time
