@@ -5,7 +5,7 @@ author:
   - name: "Juan Nadal"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "Project description"
+description: "A data-driven analysis investigating whether movie stars justify their pay premiums compared to other success factors like storytelling, release timing, and streaming platforms using 1M+ movies from TMDB and IMDb datasets."
 format:
    html:
     code-tools: true
