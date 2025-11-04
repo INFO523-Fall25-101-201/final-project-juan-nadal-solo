@@ -1,5 +1,8 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=21451842)
 
+
+
+Site URL: https://info523-fall25-101-201.github.io/final-project-juan-nadal-solo/
 # Are Movie Stars Worth Their Premiums?
 ## Predictive Analysis of Movie Financial Performance
 
