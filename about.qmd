@@ -5,12 +5,7 @@ editor: visual
 jupyter: python3
 ---
 
-This project was developed by **[Team Name]** For [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.
+This project was developed by Juan Nadal For [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.
 
--   Team member 1: One sentence description of Team member 1 (e.g., year, major, etc.).
+-   Juan Nadal: First-year Data Science student with an MBA and professional experience as a data scientist.
 
--   Team member 2: One sentence description of Team member 2 (e.g., year, major, etc.).
-
--   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).
-
--   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
