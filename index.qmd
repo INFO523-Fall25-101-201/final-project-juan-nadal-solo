@@ -1,8 +1,8 @@
 ---
-title: "Project Title"
+title: "Predictive Analysis of Modern Movie Success"
 subtitle: "INFO 523 - Final Project"
 author: 
-  - name: "Team name - Team member 1, Team member 2,..."
+  - name: "Juan Nadal"
     affiliations:
       - name: "College of Information Science, University of Arizona"
 description: "Project description"
@@ -20,4 +20,14 @@ jupyter: python3
 
 ## Abstract
 
-Add project abstract here.
+This project investigates whether high-profile movie stars justify their substantial pay premiums or if other factors more significantly drive movie success. While the film industry traditionally relies on celebrity star power as a primary driver of box office performance, this analysis hypothesizes that movies often overinvest in expensive stars at the expense of equally or more important factors such as strong storytelling, strategic release timing, genre selection, and platform distribution.
+
+Using comprehensive datasets from The Movie Database (TMDB) and IMDb containing over 1 million movies with associated metadata including budgets, revenues, cast information, ratings, and release details, this study employs statistical analysis, predictive modeling, and social network analysis to quantify the true impact of celebrity involvement on both financial and critical outcomes. The analysis compares star power against key variables including genre, release timing (summer blockbusters vs. holiday releases), sequel status, and streaming platform presence to determine which features most strongly predict movie success.
+
+The project delivers three primary outputs:
+
+(1) Statistical validation testing whether star power is overrated compared to narrative quality, timing, and platform strategy;
+(2) A predictive model identifying the features that most reliably forecast movie success; and
+(3) Interactive visualizations revealing industry trends and the evolving economics of star power in the streaming era.
+
+

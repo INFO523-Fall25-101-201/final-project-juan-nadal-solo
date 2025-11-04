@@ -7,6 +7,7 @@
 /.quarto/
 
 /data
+/usernotes
 
 # Python
 __pycache__/
