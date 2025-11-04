@@ -2,11 +2,11 @@ project:
   type: website
 
 website:
-  title: Project Title
+  title:  Star Power Analysis
   navbar:
     right:
       - icon: github
-        href: https://github.com/INFO-523-SU24/final-project # Need to change to your project repo
+        href: https://github.com/INFO523-Fall25-101-201/final-project-juan-nadal-solo # Need to change to your project repo
     left:
       - text: Project
         href: index.qmd
