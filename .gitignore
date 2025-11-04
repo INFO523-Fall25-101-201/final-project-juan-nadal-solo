@@ -6,7 +6,10 @@
 
 /.quarto/
 
-/data
+# Data directories (but allow README.md)
+/data/raw/
+/data/processed/
+/data/models/
 /usernotes
 
 # Python
@@ -94,3 +97,4 @@ _book/
 # R and Quarto temp files
 .Rproj.user
 .httr-oauth
+**/*.quarto_ipynb

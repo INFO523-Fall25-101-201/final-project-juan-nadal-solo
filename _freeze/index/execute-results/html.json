@@ -1,9 +1,10 @@
 {
-  "hash": "0e6b82ab6a634a8b8dc925668c0f975c",
+  "hash": "87ea6cc7430316322de77f0b50b0def8",
   "result": {
-    "markdown": "---\ntitle: Project title\nsubtitle: INFO 523 - Project Final\nauthor: Team name\nformat: html\neditor: visual\n---\n\n## Abstract\n\nAdd project abstract here.\n\n",
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Predictive Analysis of Modern Movie Success\"\nsubtitle: \"INFO 523 - Final Project\"\nauthor: \n  - name: \"Juan Nadal\"\n    affiliations:\n      - name: \"College of Information Science, University of Arizona\"\ndescription: \"A data-driven analysis investigating whether movie stars justify their pay premiums compared to other success factors like storytelling, release timing, and streaming platforms using 1M+ movies from TMDB and IMDb datasets.\"\nformat:\n   html:\n    code-tools: true\n    code-overflow: wrap\n    embed-resources: true\neditor: visual\nexecute:\n  warning: false\n  echo: false\njupyter: python3\n---\n\n## Abstract\n\nThis project investigates whether high-profile movie stars justify their substantial pay premiums or if other factors more significantly drive movie success. While the film industry traditionally relies on celebrity star power as a primary driver of box office performance, this analysis hypothesizes that movies often overinvest in expensive stars at the expense of equally or more important factors such as strong storytelling, strategic release timing, genre selection, and platform distribution.\n\nUsing comprehensive datasets from The Movie Database (TMDB) and IMDb containing over 1 million movies with associated metadata including budgets, revenues, cast information, ratings, and release details, this study employs statistical analysis, predictive modeling, and social network analysis to quantify the true impact of celebrity involvement on both financial and critical outcomes. The analysis compares star power against key variables including genre, release timing (summer blockbusters vs. holiday releases), sequel status, and streaming platform presence to determine which features most strongly predict movie success.\n\nThe project delivers three primary outputs:\n\n(1) Statistical validation testing whether star power is overrated compared to narrative quality, timing, and platform strategy;\n(2) A predictive model identifying the features that most reliably forecast movie success; and\n(3) Interactive visualizations revealing industry trends and the evolving economics of star power in the streaming era.\n\n",
     "supporting": [
-      "index_files"
+      "index_files\\figure-html"
     ],
     "filters": [],
     "includes": {}

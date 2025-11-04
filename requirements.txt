@@ -1,2 +1,20 @@
+# Core dependencies for data import and database
+kagglehub
+pandas
+psycopg2-binary
+python-dotenv
+
+# Data visualization
+matplotlib
+seaborn
+
+# Machine learning and scientific computing
+numpy
+scikit-learn
+xgboost
+statsmodels
+
+# Jupyter notebook support
 jupyter
+ipykernel
 nbformat
