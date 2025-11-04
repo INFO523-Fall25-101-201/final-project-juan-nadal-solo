@@ -122,8 +122,6 @@ All statistical analysis, machine learning models, and visualizations will query
 2. Do sequels and franchises outperform original films financially?
 3. Is there an optimal budget range that maximizes ROI?
 4. Does release timing (month, competitive landscape) significantly impact financial outcomes?
-5. Which directors consistently deliver high ROI films?
-6. Can we identify "hidden gems" - low-budget, high-ROI films with replicable success patterns?
 
 ## Methodology: 5-Phase Analysis Plan
 
@@ -135,10 +133,9 @@ All statistical analysis, machine learning models, and visualizations will query
 1. Genre Performance Analysis (revenue vs ROI comparison)
 2. Seasonality Analysis (release timing impact on box office)
 3. Star Power Analysis (top actors by average ROI)
-4. Franchise vs Standalone Comparison (financial metrics)
-5. Budget vs Revenue Scatter Plot (risk/reward relationship)
-6. ROI Distribution Histogram (profitability patterns)
-7.Yearly Trends (historical budget and revenue evolution)
+4. Budget vs Revenue Scatter Plot (risk/reward relationship)
+5. ROI Distribution Histogram (profitability patterns)
+6. Yearly Trends (historical budget and revenue evolution)
 
 **Tools:** Python (matplotlib, seaborn, plotly), SQL queries for data aggregation
 
