@@ -64,12 +64,14 @@ WHERE m.budget > 0 AND m.revenue > 0
 ORDER BY m.revenue DESC
 LIMIT 1000
 """
-
+from IPython.display import display
 df_sample = pd.read_sql_query(query, conn)
 print(f"Loaded {len(df_sample):,} movies with complete financial data")
 print(f"Database contains {df_sample['title'].nunique():,} unique titles")
 print(f"\nSample data:")
-df_sample.head()
+pd.set_option('display.max_colwidth', None)
+display(df_sample.head())
+pd.reset_option('display.max_colwidth')
 ```
 
 This project utilizes three comprehensive Kaggle datasets totaling approximately 770 MB:
