@@ -127,7 +127,7 @@ print(genre_df.to_string(index=False))
 #| label: fig-budget-revenue
 #| fig-cap: "Relationship between budget and revenue for top 1000 highest-grossing movies"
 
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(8, 8))
 plt.scatter(df_sample['budget'] / 1e6, df_sample['revenue'] / 1e6, alpha=0.6, s=50)
 plt.xlabel('Budget (millions USD)')
 plt.ylabel('Revenue (millions USD)')
