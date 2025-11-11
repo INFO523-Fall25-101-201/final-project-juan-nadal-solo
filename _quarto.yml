@@ -13,7 +13,7 @@ website:
       - text: Proposal
         href: proposal.qmd
       - text: Analysis
-        href: analysis.qmd
+
       - text: Presentation
         href: presentation.qmd
       - text: About
