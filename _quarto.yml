@@ -6,14 +6,14 @@ website:
   navbar:
     right:
       - icon: github
-        href: https://github.com/INFO523-Fall25-101-201/final-project-juan-nadal-solo # Need to change to your project repo
+        href: https://github.com/INFO523-Fall25-101-201/final-project-juan-nadal-solo
     left:
       - text: Project
         href: index.qmd
       - text: Proposal
         href: proposal.qmd
       - text: Analysis
-
+        href: analysis.qmd
       - text: Presentation
         href: presentation.qmd
       - text: About
