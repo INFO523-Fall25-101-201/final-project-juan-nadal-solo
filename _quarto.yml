@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title:  Star Power Analysis
+  title: Star Power Analysis
   navbar:
     right:
       - icon: github
@@ -18,6 +18,8 @@ website:
         href: presentation.qmd
       - text: About
         href: about.qmd
+      - text: Writeup
+        href: writeup.qmd
 
 format:
   html:
