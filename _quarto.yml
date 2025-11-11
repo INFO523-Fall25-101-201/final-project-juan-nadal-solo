@@ -12,14 +12,12 @@ website:
         href: index.qmd
       - text: Proposal
         href: proposal.qmd
-      - text: Analysis
-        href: analysis.qmd
+
       - text: Presentation
         href: presentation.qmd
       - text: About
         href: about.qmd
-      - text: Writeup
-        href: Writeup.qmd
+
 
 format:
   html:
