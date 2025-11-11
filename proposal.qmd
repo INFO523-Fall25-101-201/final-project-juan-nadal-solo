@@ -164,9 +164,3 @@ plt.show()
   - Franchise indicator (sequel vs. original)
   - Platform diversity score (number of streaming services)
   - Success metrics (both financial and critical)
-- **External data**: Potentially merge in social media metrics or awards data if available
-- **Approach**:
-  - Feature importance analysis using random forests or gradient boosting
-  - Comparative statistical analysis across different success factors
-  - Social network analysis of actor collaborations to measure celebrity impact
-  - Interactive visualizations showing how success factors have evolved over time
