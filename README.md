@@ -61,60 +61,6 @@ The raw Kaggle datasets present several preprocessing challenges:
 - **Missing values:** Sparse data for older films and international releases
 - **Denormalized structure:** Redundant information across datasets requiring careful joins and deduplication
 
-### ETL Process
-
-To address these challenges, the project will implement a structured Extract-Transform-Load (ETL) pipeline:
-
-**1. Extract**
-- Download raw CSV files from Kaggle (via kagglehub or Kaggle API)
-- Store original files in `/data/raw` directory (gitignored)
-
-**2. Transform**
-Custom Python scripts (`/scripts/data_cleaning/`) will handle:
-- **JSON parsing:** Extract nested JSON into relational tables (separate movies, cast, genres tables)
-- **Data normalization:** Split denormalized data into proper relational schema
-- **Type conversion:** Standardize dates, currencies, and categorical encodings
-- **Deduplication:** Identify and merge duplicate movie entries across datasets
-- **Validation:** Check for logical inconsistencies (e.g., revenue < budget, invalid dates)
-
-**3. Load**
-- Import cleaned data into PostgreSQL database
-- Create normalized schema with foreign key relationships
-- Build indexes on frequently queried columns (movie_id, release_date, genre, etc.)
-- Generate materialized views for complex aggregations
-
-### Database Architecture
-
-PostgreSQL will serve as the central data platform for all analysis:
-
-```
-Database: movie_analysis
-
-Planned Tables:
-├── movies              # Core movie metadata (title, release_date, budget, revenue, runtime)
-├── cast                # Actor information and roles
-├── crew                # Directors, producers, writers
-├── genres              # Movie genre classifications
-├── production_companies
-├── ratings             # User ratings (TMDB, IMDb)
-└── platforms           # Streaming availability (Netflix, Apple TV, YouTube)
-```
-
-**Benefits of PostgreSQL Approach:**
-- **Query Performance:** Fast aggregations over 1M+ rows using indexes
-- **Data Integrity:** Foreign key constraints ensure referential integrity
-- **Reproducibility:** SQL queries are version-controlled and auditable
-- **Scalability:** Handles complex multi-table joins efficiently
-- **Integration:** Python analysis connects via psycopg2 or SQLAlchemy
-
-### Analysis Workflow
-
-```
-Raw CSV Files → Python Cleaning Scripts → PostgreSQL Database → Python Analysis (Jupyter) → Quarto Reports
-```
-
-All statistical analysis, machine learning models, and visualizations will query the PostgreSQL database using Python libraries (pandas, SQLAlchemy, psycopg2, scikit-learn).
-
 ## Research Questions
 
 ### Primary Question
@@ -138,7 +84,7 @@ All statistical analysis, machine learning models, and visualizations will query
 3. Star Power Analysis (top actors by average ROI)
 4. Budget vs Revenue Scatter Plot (risk/reward relationship)
 5. ROI Distribution Histogram (profitability patterns)
-6. Yearly Trends (historical budget and revenue evolution)
+
 
 **Tools:** Python (matplotlib, seaborn, plotly), SQL queries for data aggregation
 
@@ -156,8 +102,8 @@ All statistical analysis, machine learning models, and visualizations will query
 
 **Approach:**
 - **Feature Engineering:** Create 50+ features from database (numerical, categorical, derived)
-  - Numerical: budget, release_month, release_year, vote_average, runtime
-  - Categorical: genres (one-hot encoded), franchise_status, top_actor_presence
+  - Numerical: budget, release_month, release_year
+  - Categorical: genres, franchise_status, top_actor_presence
   - Derived: budget_log, budget_category, cast_avg_roi, competition_index
 
 - **Models to Train:**
@@ -173,7 +119,6 @@ All statistical analysis, machine learning models, and visualizations will query
   - 5-fold cross-validation for robustness
 
 **Deliverables:**
-- Trained model files (.pkl) for each algorithm
 - Performance comparison report (R², RMSE, MAE)
 - Feature importance visualization (top 15-20 ROI drivers)
 - Prediction tool for new movie concepts
@@ -186,61 +131,9 @@ All statistical analysis, machine learning models, and visualizations will query
 - H4: Actor historical ROI predicts current film's ROI
 - H5: Genre interactions exist (hybrid genres perform differently)
 
----
-
-### Phase 3: Data Export for Business Intelligence
-
-**Objective:** Export cleaned, aggregated data to CSV files for Tableau/Excel dashboards and stakeholder reporting.
-
-**Planned Exports:**
-1. movies_roi_analysis.csv - Complete movie list with ROI metrics
-2. genre_performance.csv - Aggregated genre statistics
-3. actor_star_power.csv - Actor rankings by ROI
-4. release_seasonality.csv - Month-by-month revenue and ROI patterns
-5. franchise_comparison.csv - Franchise vs standalone metrics
-6. yearly_trends.csv - Historical trends in budget, revenue, release volume
 
 
-**Use Cases:**
-- Tableau/Power BI dashboard creation
-- Executive presentation slides with pivot tables
-- Collaboration with non-technical stakeholders
-- Academic paper appendices
-
----
-
-### Phase 4: Custom Query Analysis
-
-**Objective:** Answer specific research questions with targeted SQL queries.
-
-**Planned Analyses:**
-
-1. **Sequel Performance Analysis**
-   - Question: Do sequels outperform original films financially?
-   - Approach: Classify films using title patterns and collections
-
-2. **Director Impact Study**
-   - Question: Which directors consistently deliver high ROI?
-   - Approach: Analyze director track records (minimum 3 films)
-
-3. **Optimal Budget Sweet Spot**
-   - Question: Is there an optimal budget range that maximizes ROI?
-   - Approach: Analyze ROI by budget deciles
-
-4. **Genre Combination Analysis**
-   - Question: Are hybrid genres more profitable than pure genres?
-   - Approach: Compare single-genre vs multi-genre films
-
-**Deliverables:**
-- Custom SQL query scripts (.sql files)
-- Results documentation with findings
-- Statistical significance testing (p-values, confidence intervals)
-- Visualizations of query outputs
-- Executive summary answering each question
-
----
-
-### Phase 5: Advanced Deep Dive Analysis
+### Phase 3: Advanced Deep Dive Analysis
 
 **Objective:** Conduct advanced analytics using graph theory, network analysis, and machine learning techniques.
 
@@ -259,23 +152,6 @@ All statistical analysis, machine learning models, and visualizations will query
 - Measure market saturation by genre and time period
 - Analyze first-mover advantage and counterprogramming strategies
 
-**5.3 Criteria for "Hidden Gems":**
-- Budget < $5M AND ROI > 1000%
-- No A-list actors AND revenue > $50M
-- High critical reception (vote_average > 7) AND budget < $10M
-
-**5.4 Time Series Forecasting**
-- Model historical trends in average budget, revenue, ROI
-- Identify structural breaks (e.g., streaming era impact)
-
-
-**Deliverables:**
-- Interactive actor network graph (HTML via Plotly/NetworkX)
-- Keyword theme report with topic distributions
-- Competitive landscape dashboard
-- Hidden gems case study document
-- Time series forecast with 5-year projections
-- Deep dive Jupyter notebook with all analyses
 
 ## Key Variables
 
@@ -384,33 +260,6 @@ All statistical analysis, machine learning models, and visualizations will query
 - **GitHub Pages:** Automated deployment via GitHub Actions
 - **RevealJS:** Presentation slides (via Quarto)
 
-
-### Website Publishing
-
-```bash
-# Preview website with live reload
-quarto preview
-
-# Render entire site
-quarto render
-
-# Render specific document
-quarto render index.qmd
-quarto render presentation.qmd
-
-# Render presentation to PDF
-quarto render presentation.qmd --to pdf
-```
-
-### GitHub Deployment
-
-The project auto-deploys to GitHub Pages via `.github/workflows/publish-site.yml`:
-1. Push to `main` branch triggers the action
-2. Installs dependencies, Quarto
-3. Renders the site with `quarto render`
-4. Deploys output to `gh-pages` branch
-
-**Important:** Test locally with `quarto preview` before pushing.
 
 
 ## References and Data Sources
