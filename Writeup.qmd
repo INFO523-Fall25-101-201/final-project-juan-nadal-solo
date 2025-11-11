@@ -1,3 +1,24 @@
+---
+title: "Are Movie Stars Worth Their Premiums?"
+subtitle: "Write UP"
+author:
+  - name: "Juan Nadal"
+    affiliations:
+      - name: "College of Information Science, University of Arizona"
+description: "Analyzing whether expensive movie stars justify their pay premiums compared to other success factors using 1M+ movies from TMDB and IMDb datasets"
+format:
+  html:
+    code-tools: true
+    code-overflow: wrap
+    code-line-numbers: true
+    embed-resources: true
+editor: visual
+code-annotations: hover
+execute:
+  warning: false
+jupyter: python3
+---
+
 **Project Narrative: Star Power Analysis – Do Movie Stars Justify Their Premiums?**
 
 **Author:** Juan Nadal
@@ -19,7 +40,7 @@ At the outset of this project, I approached the idea of “star power” with sk
 The initial analysis revealed significant data integrity issues that threatened to distort results.
 
 **Budget Inaccuracies:**
-For example, Robert Downey Jr. appeared in the 1987 movie Less Than Zero where the dataset showed a $1 budget with 20 million in revenue, making the ROI appear abnormally high. Many smaller films lacked any budget information, making comparisons unreliable.
+For example, Robert Downey Jr. appeared in the 1987 movie Less Than Zero where the dataset showed a \$1 budget (actual budget was \$8 million) with \$20 million in revenue, making the ROI appear abnormally high. Many smaller films lacked any budget information, making comparisons unreliable.
 
 **Incomplete Cost and Revenue Data:**
 Some budgets excluded marketing expenses, which can match or exceed production costs. Revenue often reflected only theatrical sales, ignoring merchandise or streaming income, which is important for franchises like Marvel.
@@ -57,14 +78,14 @@ After cleaning and merging data, I analyzed **5,311 movies (1915–2017)** with 
 * Mean ROI: 343.9%
 * Median ROI: 106.7%
 
-**Key Outcome:** Star power accounted for **85.05%** of ROI prediction in machine learning models—far exceeding other variables.
+**Key Outcome:** Star power accounted for **85.05%** of ROI prediction in machine learning models, far exceeding other variables.
 
 * Correlation between cast ROI and movie ROI: **r = 0.441 (p < 0.001)**
 * A-list films: 458.2% average ROI
 * Non-A-list films: 337.2% average ROI
 * Difference: **+121 percentage points (p = 0.024)**
 
-Other factors—budget, release timing, and genre. Each contributed less than 4% to the ROI prediction.
+Other factors include budget, release timing, and genre. Each contributed less than 4% to the ROI prediction.
 
 | Star Tier             | Avg ROI | Movie Count | % of Total |
 | --------------------- | ------- | ----------- | ---------- |
@@ -98,10 +119,10 @@ Budget \$25M, revenue \$441M (ROI 1,665%). Williams’s average ROI across films
 Despite an unknown cast, the film achieved 1,234% ROI on a $35M budget. This is an exception proving that great scripts and timing can sometimes offset lack of star power.
 
 **Red One (2024):**
-Even with Dwayne Johnson and Chris Evans, the film underperformed (ROI –25.6%), underscoring that celebrity alone cannot rescue weak storytelling.
+Even with Dwayne Johnson and Chris Evans, the film underperformed with an ROI of (–25.6%), underscoring that celebrity alone cannot rescue weak storytelling.
 
 **Argylle (2024):**
-Despite an ensemble cast, ROI was –55.8%, showing diminishing returns when high costs meet poor narrative reception.
+Despite an ensemble cast, the movie ROI was (–55.8%), showing diminishing returns when high costs meet poor narrative reception.
 
 ---
 
@@ -133,7 +154,7 @@ However, star power cannot compensate for poor scripts or misaligned concepts. H
 
 **For Studio Executives:**
 
-* Prioritize proven stars (300%+ historical ROI).
+* Prioritize proven stars (200%+ historical ROI).
 * Combine strong stories with recognizable talent.
 
 **For Producers:**
@@ -155,7 +176,7 @@ Enhanced datasets could explore:
 * 2008–2024 MCU and streaming-era films.
 * Verified actor pay scales.
 * Marketing cost breakdowns and merchandise revenue.
-* Social media follower count as emerging star power proxy.
+* Social media followers count as an emerging star power proxy.
 
 ---
 

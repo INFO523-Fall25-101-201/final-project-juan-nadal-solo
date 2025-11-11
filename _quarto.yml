@@ -19,7 +19,7 @@ website:
       - text: About
         href: about.qmd
       - text: Writeup
-        href: writeup.qmd
+        href: Writeup.qmd
 
 format:
   html:
