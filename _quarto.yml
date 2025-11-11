@@ -12,6 +12,8 @@ website:
         href: index.qmd
       - text: Proposal
         href: proposal.qmd
+      - text: Analysis
+        href: analysis.qmd
       - text: Presentation
         href: presentation.qmd
       - text: About
@@ -25,4 +27,4 @@ format:
     toc: true
 
 execute:
-  freeze: auto
+  freeze: true
