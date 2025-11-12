@@ -6,10 +6,8 @@
 
 /.quarto/
 
-# Data directories (but allow README.md)
-/data/raw/
-/data/processed/
-/data/models/
+
+
 /usernotes
 
 # Python
