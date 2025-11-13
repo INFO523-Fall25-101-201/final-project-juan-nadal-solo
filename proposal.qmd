@@ -161,6 +161,3 @@ plt.show()
 - **Variables involved**: Genre classifications, release month/season, sequel/franchise status, streaming platform availability, budget tiers, cast prominence, production company size
 - **Variables to create**:
   - Seasonal release categories (summer blockbuster, holiday, off-season)
-  - Franchise indicator (sequel vs. original)
-  - Platform diversity score (number of streaming services)
-  - Success metrics (both financial and critical)
