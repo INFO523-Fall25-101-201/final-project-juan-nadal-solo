@@ -158,6 +158,6 @@ plt.show()
 
 **Question 2: Predictive Modeling of Success**
 
-- **Variables involved**: Genre classifications, release month/season, sequel/franchise status, streaming platform availability, budget tiers, cast prominence, production company size
+- **Variables involved**: Genre classifications, release month/season, franchise status, budget tiers, cast prominence, production company
 - **Variables to create**:
   - Seasonal release categories (summer blockbuster, holiday, off-season)
