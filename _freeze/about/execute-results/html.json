@@ -1,9 +1,10 @@
 {
-  "hash": "d3a417830bf5841df8a6518236c7f44d",
+  "hash": "65d4fdd3f501bb1bcb7ab18867a90682",
   "result": {
-    "markdown": "---\ntitle: About\nformat: html\neditor: visual\n---\n\nThis project was developed by **\\[Team Name\\]** For [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.\n\n-   Team member 1: One sentence description of Team member 1 (e.g., year, major, etc.).\n\n-   Team member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\n\n-   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\n\n-   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).\n\n",
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"About\"\nformat: html\neditor: visual\njupyter: python3\n---\n\nThis project was developed by **Juan Nadal** for [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.\n\n-   Juan Nadal: First-year Data Science student with an MBA and professional experience as a data scientist.\n\n",
     "supporting": [
-      "about_files"
+      "about_files\\figure-html"
     ],
     "filters": [],
     "includes": {}
