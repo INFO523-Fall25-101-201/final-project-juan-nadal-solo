@@ -49,15 +49,19 @@ execute:
 ## The Answer {.center}
 
 ::: {.fragment .fade-in}
-### **YES**
-### (but only with proven track records)
+### **MAYBE**
+### (with significant methodological caveats)
 :::
 
 ::: {.fragment .fade-in}
-**Star power accounts for 85% of ML prediction importance**
+**Star power shows statistical significance but modest effects**
 
-Machine learning reveals complex, non-linear patterns
-(Statistical correlation: 0.078, but ML captures interactions)
+::: {style="font-size: 0.85em;"}
+- Statistical correlation: r = 0.078 (weak but significant, p < 0.001)
+- ML importance: 85% ⚠️ **REQUIRES REANALYSIS** (target leakage detected)
+- Effect size: Cohen's d = 0.14 (negligible practical significance)
+- Sample: 640 movies (12%) with complete cast financial data
+:::
 :::
 
 ## Data Overview {.smaller}
@@ -159,10 +163,10 @@ Machine learning reveals complex, non-linear patterns
 ::: {.column width="50%"}
 **Mean ROI by Star Category:**
 
-- Superstar (>300% cast ROI): **788.5% ROI** (124 movies, 2.3%)
-- A-list (150-300%): **215.8% ROI** (169 movies, 3.2%)
-- B-list (50-150%): **62.6% ROI** (225 movies, 4.2%)
-- Unknown/C-list (<50%): **350.1% ROI** (4,793 movies, 90.2%)
+- Superstar (cast_avg_roi >300%): **788.5% ROI** (124 movies, 2.3%)
+- A-list (cast_avg_roi 150-300%): **215.8% ROI** (169 movies, 3.2%)
+- B-list (cast_avg_roi 50-150%): **62.6% ROI** (225 movies, 4.2%)
+- Unknown/C-list (cast_avg_roi <50%): **350.1% ROI** (4,793 movies, 90.2%)
 
 **F-statistic: 19.1, p < 0.001**
 :::
@@ -198,9 +202,9 @@ Machine learning reveals complex, non-linear patterns
 
 - T-statistic: 2.25
 - P-value: 0.024
-- Cohen's d: 0.14 (small effect)
+- Cohen's d: 0.14 (negligible effect size)
 
-**Top-tier stars show statistically significant 121-point increase in ROI**
+**Statistically significant (p<0.05) but practically small difference**
 :::
 :::
 
@@ -217,7 +221,9 @@ Machine learning reveals complex, non-linear patterns
 | Ridge Regression | 33.8% |
 | Linear Regression | 33.6% |
 
-**Exceeded 90% accuracy target**
+::: {style="font-size: 0.75em; margin-top: 1em; padding: 0.5em; background-color: #f8d7da; border-left: 4px solid #dc3545;"}
+**CRITICAL: Target Leakage Detected** - Models used "revenue" as a feature to predict ROI, which is defined as (Revenue - Budget) / Budget. This artificially inflates accuracy. Models must be re-trained excluding revenue for valid results.
+:::
 
 ## Feature Importance {.smaller}
 
@@ -225,11 +231,12 @@ Machine learning reveals complex, non-linear patterns
 
 **Top 3 Features (ML Importance):**
 1. **cast_avg_roi: 85.05%**
-2. revenue: 3.37%
+2. revenue: 3.37% ⚠️ TARGET LEAKAGE
 3. budget_log: 2.12%
 
-**ML feature importance ≠ correlation strength**
-Star power enables accurate predictions through complex patterns
+::: {style="font-size: 0.75em; margin-top: 0.5em; padding: 0.5em; background-color: #f8d7da; border-left: 4px solid #dc3545;"}
+**Target Leakage Issue:** Revenue cannot be known before a movie's release, so it should NOT be used to predict ROI. These results require reanalysis excluding revenue.
+:::
 
 ## Budget vs ROI {.smaller}
 
@@ -253,11 +260,15 @@ Star power enables accurate predictions through complex patterns
 
 | Scenario | Budget | Cast ROI | Predicted ROI | Profit |
 |----------|--------|----------|---------------|--------|
-| Summer Blockbuster | $100M | 300% | **166%** | $66M |
-| Low-Budget Horror | $2M | 50% | **131%** | $624K |
-| Holiday Animation | $75M | 200% | **162%** | $47M |
+| Summer Blockbuster | $100M | 300% | **66%** | $66M |
+| Low-Budget Horror | $2M | 50% | **31%** | $620K |
+| Holiday Animation | $75M | 200% | **62%** | $46.5M |
 
 **Key:** Same budget, different cast → 35% ROI difference
+
+::: {style="font-size: 0.75em; margin-top: 0.5em; padding: 0.5em; background-color: #fff3cd; border-left: 4px solid #ffc107;"}
+**Note:** ROI values corrected to use Net ROI formula: (Revenue - Budget) / Budget × 100
+:::
 
 ## Practical Implications {.smaller}
 
@@ -283,40 +294,48 @@ Star power enables accurate predictions through complex patterns
 
 ## Limitations & Future Work {.smaller}
 
-**Limitations:**
-- **Limited cast data:** Only 12% of movies have complete actor ROI history
+**Critical Limitations:**
+- **Target Leakage:** ML models incorrectly used revenue to predict ROI (invalidates 93.2% R² score)
+- **Limited cast data:** Only 12% of movies (640) have complete actor ROI history
+- **Small effect size:** Cohen's d = 0.14 (negligible practical significance)
 - Pre-streaming era data (1915-2017)
 - No marketing spend data
 - Correlation ≠ causation
 
-**Future:**
+**Immediate Next Steps:**
+- Re-train ML models WITHOUT revenue feature
+- Expect R² to drop significantly (likely 30-50%)
+- Recalculate feature importance rankings
+
+**Future Research:**
 - Add Netflix/Disney+ data
 - Include social media metrics
 - Test with 2024-2025 releases
 
 ## Conclusion {.center}
 
-### **Stars ARE Worth Their Premiums**
+### **Stars MAY Be Worth Their Premiums**
+### **(with significant caveats)**
 
 ::: {.fragment .fade-in}
 **IF they have proven ROI > 200%**
 :::
 
 ::: {.fragment .fade-in}
-**Evidence:**
-- 85% of ML prediction importance
-- Machine learning achieves 93.2% accuracy
-- Top-tier stars show 121% higher ROI
-- Statistically significant (p < 0.05)
-- Modest correlation (0.078) but strong ML patterns
+**Statistical Evidence (VALID):**
+- Statistically significant correlation (p < 0.001)
+- Weak linear relationship (r = 0.078, explains 0.61% variance)
+- Negligible effect size (Cohen's d = 0.14)
+- Based on 640 movies (12%) with complete cast financial data
 
-::: {style="font-size: 0.75em; margin-top: 0.5em; font-style: italic;"}
-*Star power analysis based on 640 movies (12%) with complete cast financial data*
-:::
+**Machine Learning Evidence (INVALID - Needs Reanalysis):**
+- 85% of ML prediction importance ⚠️ **TARGET LEAKAGE**
+- 93.2% accuracy ⚠️ **INFLATED BY USING REVENUE**
+- Must re-run models without revenue feature
 :::
 
 ::: {.fragment .fade-in}
-**Recommendation:** Prioritize casting decisions over budget size
+**Honest Recommendation:** Star power matters but is not dominant. Success requires multiple factors: quality storytelling, budget discipline, and yes, some star power.
 :::
 
 ## Questions? {.center}
