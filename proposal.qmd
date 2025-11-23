@@ -1,11 +1,11 @@
 ---
-title: "Proposal title"
-subtitle: "Proposal"
-author: 
-  - name: "Team Name - Team member 1, Team member 2,..."
+title: "Are Movie Stars Worth Their Premiums?"
+subtitle: "Project Proposal"
+author:
+  - name: "Juan Nadal"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "Project description"
+description: "Analyzing whether expensive movie stars justify their pay premiums compared to other success factors using 1M+ movies from TMDB and IMDb datasets"
 format:
   html:
     code-tools: true
@@ -23,6 +23,15 @@ jupyter: python3
 #| label: load-pkgs
 #| message: false
 import numpy as np
+import pandas as pd
+import psycopg2
+from dotenv import load_dotenv
+import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set visualization style
+sns.set_style("whitegrid")
 ```
 
 ## Dataset
@@ -30,16 +39,125 @@ import numpy as np
 ```{python}
 #| label: load-dataset
 #| message: false
+
+# Load environment variables and connect to database
+load_dotenv()
+
+# Database connection
+conn = psycopg2.connect(
+    host=os.getenv('DB_HOST'),
+    user=os.getenv('DB_USER'),
+    password=os.getenv('DB_PASSWORD'),
+    database=os.getenv('DB_DATABASE'),
+    port=os.getenv('DB_PORT')
+)
+
+# Load sample data for proposal
+query = """
+SELECT
+    m.id, m.title, m.release_date, m.budget, m.revenue,
+    m.vote_average, m.vote_count, m.popularity,
+    (m.revenue - m.budget) as profit,
+    CASE WHEN m.revenue > 0 THEN m.revenue::float / NULLIF(m.budget, 0) ELSE 0 END as roi
+FROM "Movies_dataset".movies m
+WHERE m.budget > 0 AND m.revenue > 0
+ORDER BY m.revenue DESC
+LIMIT 1000
+"""
+from IPython.display import display
+df_sample = pd.read_sql_query(query, conn)
+print(f"Loaded {len(df_sample):,} movies with complete financial data")
+print(f"Database contains {df_sample['title'].nunique():,} unique titles")
+print(f"\nSample data:")
+pd.set_option('display.max_colwidth', None)
+display(df_sample.head())
+pd.reset_option('display.max_colwidth')
 ```
 
-A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
+This project utilizes three comprehensive Kaggle datasets totaling approximately 770 MB:
 
-Make sure to load the data and use inline code for some of this information.
+1. **TMDB Movies Daily Updates** (`alanvourch/tmdb-movies-daily-updates`): 960,000+ movies with regularly updated metadata including cast, crew, budgets, revenues, and release information (295.6 MB)
+
+2. **The Movies Dataset** (`rounakbanik/the-movies-dataset`): 45,000 movies with 26 million user ratings, providing detailed audience reception data and critical assessments (238.86 MB)
+
+3. **TMDB Movies Dataset 2023** (`asaniczka/tmdb-movies-dataset-2023-930k-movies`): 1 million movies with comprehensive feature data including genres, production companies, and streaming platform availability (238 MB)
+
+These datasets were chosen because they provide the scale and diversity necessary to analyze movie success factors across different eras, genres, and markets. The combination of financial data (budgets, revenues), audience metrics (ratings, reviews), and metadata (cast, genres, platforms) enables a multi-faceted analysis of what truly drives movie success.
+
+```{python}
+#| label: dataset-statistics
+#| message: false
+
+# Get comprehensive dataset statistics
+stats_query = """
+SELECT
+    COUNT(*) as total_movies,
+    COUNT(CASE WHEN budget > 0 AND revenue > 0 THEN 1 END) as movies_with_financials,
+    MIN(release_date) as earliest_movie,
+    MAX(release_date) as latest_movie,
+    AVG(CASE WHEN budget > 0 THEN budget END) as avg_budget,
+    AVG(CASE WHEN revenue > 0 THEN revenue END) as avg_revenue,
+    AVG(vote_average) as avg_rating
+FROM "Movies_dataset".movies
+"""
+
+stats = pd.read_sql_query(stats_query, conn)
+print("Database Statistics:")
+print(f"  Total movies: {stats['total_movies'].iloc[0]:,}")
+print(f"  With financial data: {stats['movies_with_financials'].iloc[0]:,}")
+print(f"  Date range: {stats['earliest_movie'].iloc[0]} to {stats['latest_movie'].iloc[0]}")
+print(f"  Average budget: ${stats['avg_budget'].iloc[0]:,.0f}")
+print(f"  Average revenue: ${stats['avg_revenue'].iloc[0]:,.0f}")
+print(f"  Average rating: {stats['avg_rating'].iloc[0]:.2f}/10")
+
+# Genre distribution
+genre_query = """
+SELECT g.name, COUNT(*) as movie_count
+FROM "Movies_dataset".genres g
+JOIN "Movies_dataset".movie_genres mg ON g.genre_id = mg.genre_id
+GROUP BY g.name
+ORDER BY movie_count DESC
+LIMIT 10
+"""
+
+genre_df = pd.read_sql_query(genre_query, conn)
+print(f"\nTop 10 Genres by Movie Count:")
+print(genre_df.to_string(index=False))
+```
+
+```{python}
+#| label: fig-budget-revenue
+#| fig-cap: "Relationship between budget and revenue for top 1000 highest-grossing movies"
+
+plt.figure(figsize=(8, 8))
+plt.scatter(df_sample['budget'] / 1e6, df_sample['revenue'] / 1e6, alpha=0.6, s=50)
+plt.xlabel('Budget (millions USD)')
+plt.ylabel('Revenue (millions USD)')
+plt.title('Movie Budget vs Revenue')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
 
 ## Questions
 
-The two questions you want to answer.
+1. **Do expensive movie stars justify their pay premiums?** Specifically, does the presence of high-profile actors correlate with higher box office revenue and better audience ratings when controlling for other factors like budget, genre, and release timing?
+
+2. **Which factors most reliably predict movie success?** Between star power, genre, release timing (summer blockbusters vs. other periods), sequel status, and streaming platform presence, which variables have the strongest predictive power for financial and critical success?
 
 ## Analysis plan
 
--   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+**Question 1: Star Power Premium Analysis**
+
+- **Variables involved**: Actor prominence scores, cast budgets, box office revenue, profitability ratios, audience ratings
+- **Variables to create**:
+  - Star power index (combining cast prominence, awards history, previous box office performance)
+  - Premium ratio (actual revenue vs. predicted revenue based on non-star factors)
+  - Cost-effectiveness metric (revenue per dollar spent on cast)
+- **Approach**: Multiple regression analysis comparing movies with high-profile casts vs. comparable films with lesser-known actors, controlling for budget, genre, and release timing
+
+**Question 2: Predictive Modeling of Success**
+
+- **Variables involved**: Genre classifications, release month/season, franchise status, budget tiers, cast prominence, production company
+- **Variables to create**:
+  - Seasonal release categories (summer blockbuster, holiday, off-season)
