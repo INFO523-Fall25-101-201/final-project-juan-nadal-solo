@@ -7,11 +7,11 @@ Star-ROI Correlation,0.0784
 Star Power R-squared,0.0061
 Budget-ROI Correlation,-0.1354
 ANOVA F-statistic,19.0976
-ANOVA p-value,6.38e-04
-T-test statistic,-3.4171
-T-test p-value,6.38e-04
-A-list Mean ROI,230.83%
-Non-A-list Mean ROI,359.38%
-High Star Success Rate,25.0%
-Low Star Success Rate,nan%
+ANOVA p-value,2.58e-12
+T-test statistic,2.2539
+T-test p-value,2.58e-12
+A-list Mean ROI,427.58%
+Non-A-list Mean ROI,338.52%
+High Star Success Rate,40.6%
+Low Star Success Rate,24.0%
 Top 100 Overlap,4
