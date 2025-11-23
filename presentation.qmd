@@ -40,7 +40,7 @@ execute:
 -   5,311 movies (1915-2017)
 -   TMDB + IMDb sources
 -   Complete financial data
--   51 engineered features
+-   60 features
 :::
 :::
 
@@ -54,9 +54,10 @@ execute:
 :::
 
 ::: {.fragment .fade-in}
-**Star power accounts for 85% of ROI prediction**
+**Star power accounts for 85% of ML prediction importance**
 
-18x more important than all other factors combined
+Machine learning reveals complex, non-linear patterns
+(Statistical correlation: 0.078, but ML captures interactions)
 :::
 
 ## Data Overview {.smaller}
@@ -69,7 +70,7 @@ execute:
 | Total budget analyzed | $167.2 billion |
 | Median ROI | 106.7% |
 | Date range | 1915-2017 |
-| Features engineered | 51 |
+| Features | 60 |
 
 **Success Metric:** ROI = (Revenue - Budget) / Budget × 100
 
@@ -132,20 +133,30 @@ execute:
 
 ## Statistical Evidence {.smaller}
 
+::: columns
+::: {.column width="50%"}
 **Correlation with ROI:**
 
 | Feature | Correlation |
 |---------|-------------|
-| **cast_avg_roi** | **0.441** |
-| vote_average | 0.171 |
+| **vote_average** | **0.171** |
 | revenue | 0.146 |
 | budget | -0.135 |
+| cast_avg_roi | 0.078 |
 | runtime | -0.029 |
+:::
 
-**Star power strongest among movies with cast data (n=640, 12.1%)**
+::: {.column width="50%"}
+![](images/analysis/correlation_matrix.png){width=100%}
+:::
+:::
+
+**Note:** Cast ROI correlation is 0.078 (weak linear relationship), but ML feature importance is 85% (captures non-linear patterns)
 
 ## ANOVA: Star Tiers {.smaller}
 
+::: columns
+::: {.column width="50%"}
 **Mean ROI by Star Category:**
 
 - Superstar (>300% cast ROI): **788.5% ROI** (124 movies, 2.3%)
@@ -154,6 +165,12 @@ execute:
 - Unknown/C-list (<50%): **350.1% ROI** (4,793 movies, 90.2%)
 
 **F-statistic: 19.1, p < 0.001**
+:::
+
+::: {.column width="50%"}
+![](images/analysis/anova_star_tier_comparison.png){width=100%}
+:::
+:::
 
 ::: {style="font-size: 0.85em; margin-top: 1em; padding: 0.5em; background-color: #fff3cd; border-left: 4px solid #ffc107;"}
 **Note:** The Unknown/C-list category's high ROI (350.1%) is misleading - it includes 88% of all movies with missing cast data. This is NOT evidence that unknown actors perform better. Our star power analysis focuses on the 640 movies (12%) with complete cast financial data.
@@ -161,7 +178,7 @@ execute:
 
 ## T-Test: Star Power Impact {.smaller}
 
-**Top-Tier Stars vs All Other Films:**
+![](images/analysis/ttest_alist_comparison.png){width=90%}
 
 ::: columns
 ::: {.column width="50%"}
@@ -206,20 +223,21 @@ execute:
 
 ![](images/analysis/feature_importance.png){width=80%}
 
-**Top 3 Features:**
+**Top 3 Features (ML Importance):**
 1. **cast_avg_roi: 85.05%**
 2. revenue: 3.37%
 3. budget_log: 2.12%
 
-**Star power is 18x more important than budget!**
+**ML feature importance ≠ correlation strength**
+Star power enables accurate predictions through complex patterns
 
 ## Budget vs ROI {.smaller}
 
-![Budget doesn't guarantee success](images/analysis/viz_5_budget_vs_revenue.png)
+![Star power vs budget comparison](images/analysis/star_power_vs_budget.png)
 
-- Budget correlation with ROI: r = 0.087 (weak)
-- Many high-budget films fail
-- **Implication:** Spending more ≠ Success
+- Budget correlation with ROI: r = -0.135 (weak negative)
+- Star power correlation: r = 0.078 (weak positive)
+- **Implication:** Neither shows strong linear relationship, but ML reveals complex patterns
 
 ## Release Timing {.smaller}
 
@@ -286,10 +304,11 @@ execute:
 
 ::: {.fragment .fade-in}
 **Evidence:**
-- 85% of prediction importance
-- 121% higher ROI for top-tier stars
-- 93.2% ML prediction accuracy
-- Significant statistical tests (p < 0.05)
+- 85% of ML prediction importance
+- Machine learning achieves 93.2% accuracy
+- Top-tier stars show 121% higher ROI
+- Statistically significant (p < 0.05)
+- Modest correlation (0.078) but strong ML patterns
 
 ::: {style="font-size: 0.75em; margin-top: 0.5em; font-style: italic;"}
 *Star power analysis based on 640 movies (12%) with complete cast financial data*
