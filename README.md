@@ -1,8 +1,7 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=21451842)
 
-
-
 Site URL: https://info523-fall25-101-201.github.io/final-project-juan-nadal-solo/
+
 # Are Movie Stars Worth Their Premiums?
 ## Predictive Analysis of Movie Financial Performance
 
@@ -16,272 +15,217 @@ Site URL: https://info523-fall25-101-201.github.io/final-project-juan-nadal-solo
 
 ## Abstract
 
-This project investigates whether high-profile movie stars justify their expensive salaries compared to other factors that drive movie success. Using comprehensive datasets from TMDB and IMDb covering over 1 million movies, we will conduct a multi-phase analysis combining data visualization, predictive modeling, and advanced analytics to determine what truly makes a movie financially successful.
+This project investigates whether high-profile movie stars justify their expensive salaries compared to other factors that drive movie success. Using comprehensive datasets from TMDB and IMDb, I analyzed 5,311 films spanning 1915-2017 to determine what truly makes a movie financially successful.
 
-**Primary Research Question:** Are expensive movie stars worth their premiums, or do factors like storytelling, release timing, genre, and streaming platforms drive success more effectively?
+**Primary Research Question:** Are expensive movie stars worth their premiums, or do factors like budget discipline, release timing, and franchise status drive success more effectively?
 
-**Success Metric:** Return on Investment (ROI) = (Total Revenue - Production Budget) / Production Budget × 100
+**Key Finding:** Star power accounts for only 1.12% of ROI prediction importance (Rank #29 of 51 features), while budget discipline accounts for 30.4%.
 
-## Datasets
-
-This analysis will leverage three comprehensive Kaggle datasets totaling approximately 770 MB:
-
-### 1. TMDB Movies Daily Updates
-- **Source:** `alanvourch/tmdb-movies-daily-updates`
-- **Size:** 960,000+ movies, 295.6 MB
-- **Description:** Most current dataset with daily updates from TMDB API
-- **Key Features:** Recent movie data, up-to-date financial metrics, current ratings
-
-### 2. The Movies Dataset
-- **Source:** `rounakbanik/the-movies-dataset`
-- **Size:** 45,000 movies with 26M+ ratings, 238.86 MB
-- **Description:** Comprehensive metadata with user ratings
-- **Key Features:** Detailed financial data, cast/crew information, user ratings, keywords, production companies
-
-### 3. TMDB Movies Dataset 2023
-- **Source:** `asaniczka/tmdb-movies-dataset-2023-930k-movies`
-- **Size:** 1 million movies, 238 MB
-- **Description:** Comprehensive historical movie database through 2023
-- **Key Features:** Broad historical coverage, genre classifications, release dates
-
-### Dataset Rationale
-
-These three datasets provide complementary perspectives: recency (daily updates), depth (ratings and detailed metadata), and breadth (1M+ movies across decades). Together, they enable robust analysis of star power versus other success factors while ensuring data quality through cross-validation and triangulation.
-
-
-## Data Processing Pipeline
-
-### Data Quality Challenges
-
-The raw Kaggle datasets present several preprocessing challenges:
-
-- **Nested JSON structures:** Many CSV columns contain JSON objects (cast lists, genres, production companies)
-- **Comma-separated values within cells:** Individual fields contain comma-delimited lists that conflict with CSV parsing
-- **Inconsistent data types:** Mixed formats for dates, currencies, and categorical variables
-- **Missing values:** Sparse data for older films and international releases
-- **Denormalized structure:** Redundant information across datasets requiring careful joins and deduplication
-
-## Research Questions
-
-### Primary Question
-**Do movies with high-paid stars generate better returns than movies focusing on other success factors?**
-
-### Secondary Questions
-1. Which factors most reliably predict movie success in the modern era?
-2. Do sequels and franchises outperform original films financially?
-3. Is there an optimal budget range that maximizes ROI?
-4. Does release timing (month, competitive landscape) significantly impact financial outcomes?
-
-## Methodology: 5-Phase Analysis Plan
-
-### Phase 1: Exploratory Data Visualization
-
-**Objective:** Understand patterns, distributions, and relationships in the movie dataset through visual exploration.
-
-**Planned Visualizations:**
-1. Genre Performance Analysis (revenue vs ROI comparison)
-2. Seasonality Analysis (release timing impact on box office)
-3. Star Power Analysis (top actors by average ROI)
-4. Budget vs Revenue Scatter Plot (risk/reward relationship)
-5. ROI Distribution Histogram (profitability patterns)
-
-
-**Tools:** Python (matplotlib, seaborn, plotly), SQL queries for data aggregation
-
-**Expected Outcomes:**
-- Visual evidence of which genres, release months, and content types drive ROI
-- Identification of optimal release timing strategies
-- Quantification of "star power" effect on financial performance
-- Understanding of franchise economics vs standalone film risks
+**Success Metric:** Return on Investment (ROI) = (Revenue - Budget) / Budget x 100
 
 ---
 
-### Phase 2: Predictive Modeling
+## Key Results
 
-**Objective:** Build machine learning models to predict ROI and identify the most important success factors.
+| Metric | Value |
+|--------|-------|
+| Movies analyzed | 5,311 |
+| Total revenue | $485.6 billion |
+| Total budget | $167.2 billion |
+| Features engineered | 60 |
+| Best model R-squared | 33.7% (XGBoost) |
+| Star power correlation | r = 0.078 (weak) |
+| Star power importance | 1.12% (Rank #29) |
+| Budget importance | 30.4% (Rank #1) |
 
-**Approach:**
-- **Feature Engineering:** Create 50+ features from database (numerical, categorical, derived)
-  - Numerical: budget, release_month, release_year
-  - Categorical: genres, franchise_status, top_actor_presence
-  - Derived: budget_log, budget_category, cast_avg_roi, competition_index
+**Conclusion:** Stars are NOT worth their premiums based on ROI data. Budget discipline is 27x more important than star power for predicting financial returns.
 
-- **Models to Train:**
-  - Linear Regression (baseline interpretability)
-  - Ridge/Lasso Regression (regularization for feature selection)
-  - Random Forest Regressor (handles non-linearity and feature interactions)
-  - Gradient Boosting (XGBoost or LightGBM for high accuracy)
+---
 
-- **Evaluation Metrics:**
-  - R² (coefficient of determination) - target: >50%
-  - RMSE (root mean squared error)
-  - MAE (mean absolute error)
-  - 5-fold cross-validation for robustness
+## Datasets
 
-**Deliverables:**
-- Performance comparison report (R², RMSE, MAE)
-- Feature importance visualization (top 15-20 ROI drivers)
-- Prediction tool for new movie concepts
-- SHAP values for model interpretation
+Three Kaggle datasets were merged and processed:
 
-**Hypotheses to Test:**
-- H1: Release month has significant impact on ROI (seasonality effect)
-- H2: Budget has diminishing returns (non-linear relationship)
-- H3: Franchise status affects revenue positively but ROI negatively
-- H4: Actor historical ROI predicts current film's ROI
-- H5: Genre interactions exist (hybrid genres perform differently)
+### 1. TMDB Movies Daily Updates
+- **Source:** `alanvourch/tmdb-movies-daily-updates`
+- **Description:** Current dataset with daily updates from TMDB API
 
+### 2. The Movies Dataset
+- **Source:** `rounakbanik/the-movies-dataset`
+- **Description:** Comprehensive metadata with user ratings, cast/crew information
 
+### 3. TMDB Movies Dataset 2023
+- **Source:** `asaniczka/tmdb-movies-dataset-2023-930k-movies`
+- **Description:** Historical movie database through 2023
 
-### Phase 3: Advanced Deep Dive Analysis
+### Data Quality Challenges Addressed
+- Budget errors: Removed 52 movies with budget < $1,000
+- ROI capping: 99th percentile at 6,620.4%
+- Missing cast data: Only 640 movies (12%) have complete actor ROI history
+- Final clean dataset: 5,311 movies
 
-**Objective:** Conduct advanced analytics using graph theory, network analysis, and machine learning techniques.
+---
 
-**Planned Components:**
+## Methodology
 
-**5.1 Actor Collaboration Network Analysis**
-- Build graph where nodes = actors, edges = collaborations
-- Calculate centrality metrics (betweenness, degree, eigenvector, PageRank)
-- Community detection (Louvain algorithm)
-- Visualize force-directed network graphs
-- Identify "connector" actors who bridge different communities
+### Statistical Analysis
+- **Correlation Analysis:** Measured linear relationships between features and ROI
+- **ANOVA:** Compared mean ROI across star tiers (Superstar, A-list, B-list, Unknown)
+- **T-test:** Direct comparison of A-list/Superstar vs. other films
+- **Effect Sizes:** Cohen's d and eta-squared for practical significance
 
-**5.2 Competitive Landscape Analysis**
-- Define competition as movies released within same week + overlapping genres
-- Calculate competition intensity scores
-- Measure market saturation by genre and time period
-- Analyze first-mover advantage and counterprogramming strategies
+### Machine Learning
+Six regression models trained to predict ROI:
 
+| Model | R-squared Score |
+|-------|-----------------|
+| XGBoost | 33.7% (Best) |
+| Lasso Regression | 31.5% |
+| Linear Regression | 31.5% |
+| Ridge Regression | 31.5% |
+| Gradient Boosting | 30.3% |
+| Random Forest | 29.9% |
+
+**Note:** Revenue was excluded from features to prevent target leakage. Original models with revenue achieved 93.2% R-squared but were invalid.
+
+---
 
 ## Key Variables
 
+### Target Variable
+- **ROI:** (Revenue - Budget) / Budget x 100
+
 ### Star Power Metrics
-- Cast prominence and billing order (cast_order)
-- Actor historical average ROI (cast_avg_roi)
-- Previous box office performance
-- Awards and nominations
-- Number of collaborations (network centrality)
+- `cast_avg_roi`: Average historical ROI of cast members
+- `star_tier`: Superstar, A-list, B-list, or Unknown/C-list
+- `num_top_actors`: Count of high-performing actors in cast
 
 ### Financial Variables
-- Production budget
-- Total revenue (domestic + international)
-- ROI (calculated)
-- Profit (revenue - budget)
-- Budget category (low/medium/high)
+- `budget`: Production budget
+- `budget_micro`: Binary flag for micro-budget films (< $1M)
+- `revenue`: Box office earnings
 
 ### Content Variables
-- Genre classification (18 genres, one-hot encoded)
-- Keyword themes (extracted from plot keywords)
-- Runtime (minutes)
-- Franchise/sequel status
-- Production companies
+- `vote_average`: Audience rating (0-10)
+- `vote_count`: Number of ratings (popularity proxy)
+- `runtime`: Film length in minutes
+- `is_franchise`: Whether part of a franchise
+- Genre flags (18 one-hot encoded genres)
 
 ### Temporal Variables
-- Release date
-- Release month (1-12)
-- Release year
-- Day of week
-- Holiday proximity
-- Competition index (same-week releases)
+- `release_month`: Month of release (1-12)
+- `release_year`: Year of release
 
-### Quality Metrics
-- TMDB vote average (1-10 scale)
-- TMDB vote count (popularity proxy)
-- IMDb ratings (when available)
-- Critical reception scores
+---
 
-## Expected Outcomes
+## Statistical Findings
 
-### Quantitative Results
-- Predictive model achieving 75%+ R² for ROI forecasting
-- Ranked list of feature importance (identify top 5 success drivers)
-- Statistical significance testing for all hypotheses
+### Correlation with ROI
+| Feature | Correlation | Interpretation |
+|---------|-------------|----------------|
+| vote_average | 0.171 | Strongest positive |
+| revenue | 0.146 | Positive but circular |
+| budget | -0.135 | Negative (higher budgets reduce ROI) |
+| cast_avg_roi | 0.078 | Very weak |
+| runtime | -0.029 | Negligible |
 
-### Qualitative Insights
-- Evidence-based answer to primary research question
-- Identification of optimal production strategies (budget, timing, casting)
-- Discovery of counterintuitive patterns in movie economics
-- Actionable recommendations for studio decision-makers
-- Understanding of industry evolution and future trends
+### T-Test Results
+- **Top-tier stars (A-list + Superstar):** Mean ROI 458.2% (n=293)
+- **All other films:** Mean ROI 337.2% (n=5,018)
+- **Difference:** +121.0% ROI
+- **P-value:** 0.024 (statistically significant)
+- **Cohen's d:** 0.14 (negligible effect size)
 
-### Deliverables
-- Quarto website with full analysis and interactive visualizations
-- 500 - 1000 word write-up with methodology and findings
-- 5-minute presentation summarizing key insights
-- 10+ CSV exports for stakeholder dashboards
-- Reproducible code repository with documentation
+The statistically significant p-value is misleading. The negligible effect size (d=0.14) indicates distributions overlap heavily, meaning stars don't consistently outperform.
 
+### Feature Importance (Top 5)
+1. budget_micro: 30.4%
+2. runtime_long: 8.2%
+3. vote_count: 5.3%
+4. num_top_actors: 5.0%
+5. is_franchise: 4.7%
 
-## Technologies
+Star power (cast_avg_roi): 1.12% - Rank #29 of 51
 
-### Database
-- **PostgreSQL 18:** Primary data storage and querying platform
-- **psycopg2:** Python database adapter
-- **SQLAlchemy:** ORM for complex queries
+---
 
-### Programming Languages
+## Technologies Used
+
+### Programming
 - **Python 3.11:** Primary analysis language
-- **SQL:** Database queries and transformations
-- **Markdown:** Documentation
+- **Jupyter Notebooks:** Data preparation and analysis
 
 ### Python Libraries
+- pandas, numpy (data processing)
+- matplotlib, seaborn (visualization)
+- scikit-learn (machine learning)
+- xgboost (gradient boosting)
+- scipy (statistical tests)
 
-**Data Processing:**
-- pandas (DataFrames and data manipulation)
-- numpy (numerical computing)
-- json (parsing nested JSON in CSV files)
-
-**Machine Learning:**
-- scikit-learn (Random Forest, Gradient Boosting, preprocessing, cross-validation)
-- xgboost (gradient boosting implementation)
-- lightgbm (alternative gradient boosting)
-
-**Model Interpretation:**
-- shap (SHAP values for feature importance)
-- eli5 (model explanation)
-
-**Visualization:**
-- matplotlib (static charts)
-- seaborn (statistical visualizations)
-- plotly (interactive visualizations)
-
-**Advanced Analysis:**
-- networkx (graph theory and network analysis)
-- nltk, spacy (NLP for keyword analysis)
-- statsmodels (time series analysis)
-
-
-**Data Acquisition:**
-- kagglehub (Kaggle dataset downloads)
-- Kaggle API (alternative download method)
-
-### Publishing and Deployment
+### Publishing
 - **Quarto:** Literate programming and website generation
 - **GitHub Pages:** Automated deployment via GitHub Actions
-- **RevealJS:** Presentation slides (via Quarto)
+- **RevealJS:** Presentation slides
 
+---
 
+## Project Structure
 
-## References and Data Sources
+```
+final-project-juan-nadal-solo/
+├── index.qmd                 # Main analysis and writeup
+├── presentation.qmd          # RevealJS presentation slides
+├── about.qmd                 # Author information
+├── _quarto.yml               # Quarto configuration
+├── data/
+│   ├── processed/            # Cleaned datasets
+│   │   ├── full_dataset.csv
+│   │   ├── feature_importance_fixed.csv
+│   │   └── model_comparison_fixed.csv
+│   └── customtheming.scss    # Presentation theme
+├── notebooks/
+│   ├── 01_data_preparation.ipynb
+│   └── 02_star_power_analysis.ipynb
+├── images/
+│   └── analysis/             # Generated visualizations
+└── _freeze/                  # Quarto computation cache
+```
+
+---
+
+## Limitations
+
+- **Limited cast data:** Only 12% of movies (640) have complete actor ROI history
+- **Modest model accuracy:** Best R-squared = 33.7% (66% of variance unexplained)
+- **Pre-streaming era:** Data spans 1915-2017, predating Netflix dominance
+- **No marketing data:** Marketing spend not included in analysis
+- **Correlation vs. causation:** Statistical relationships don't prove causation
+
+---
+
+## Future Research
+
+- Add streaming platform data (Netflix, Disney+, etc.)
+- Include social media influence metrics
+- Test with 2020-2025 releases
+- Analyze marketing spend impact
+- Expand cast data coverage
+
+---
+
+## References
 
 **Datasets:**
-- TMDB API Documentation: https://developers.themoviedb.org/3
 - Kaggle Dataset 1: https://www.kaggle.com/datasets/alanvourch/tmdb-movies-daily-updates
 - Kaggle Dataset 2: https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset
 - Kaggle Dataset 3: https://www.kaggle.com/datasets/asaniczka/tmdb-movies-dataset-2023-930k-movies
-
-**Methodology References:**
-- Feature importance analysis: SHAP (Lundberg & Lee, 2017)
-- Network analysis: Newman, M.E.J. (2010). Networks: An Introduction
-- Time series forecasting: Taylor & Letham (2018). Forecasting at Scale (Prophet)
 
 **Related Research:**
 - Movie success prediction: Sharda & Delen (2006)
 - Star power analysis: Elberse (2007)
 - Box office forecasting: Basuroy et al. (2003)
 
-
 ---
 
 #### Disclosure:
-Derived from the original data viz course by Mine Çetinkaya-Rundel @ Duke University
+Derived from the original data viz course by Mine Cetinkaya-Rundel @ Duke University

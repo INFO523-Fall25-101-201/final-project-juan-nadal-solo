@@ -213,3 +213,8 @@ Across `{python} f"{total_movies:,}"` films, star power ranks 29 of `{python} le
 **Recommendation:** Studios should prioritize budget management, franchise development, and audience engagement over celebrity salaries. Unknown actors may offer better risk-adjusted returns than expensive A-list talent.
 
 [Are Movie Stars Worth Their Premiums? - Presentation Recording](https://drive.google.com/file/d/1SSftKouaSFc6OTQPVkvTa477m4PisKmm/view)
+
+## Supporting Work
+
+- [Data Preparation Notebook](notebooks/01_data_preparation.ipynb)
+- [Star Power Analysis Notebook](notebooks/02_star_power_analysis.ipynb)
