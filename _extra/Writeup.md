@@ -1,168 +1,153 @@
-**Project Narrative: Star Power Analysis – Do Movie Stars Justify Their Premiums?**
+# Are Movie Stars Worth Their Premiums? A Data Mining Analysis of ROI Predictors in Cinema
 
 **Author:** Juan Nadal
-
-**Course:** INFO 523 – Data Mining and Discovery, Fall 2025
-
-**Date:** November 2025
+**Course:** INFO 523 - Data Mining and Discovery, Fall 2025
+**Institution:** College of Information Science, University of Arizona
 
 ---
 
-### Introduction and Motivation
+## Introduction
 
-At the outset of this project, I approached the idea of “star power” with skepticism. The assumption that high-profile actors inherently boost a movie’s revenue seemed oversimplified. To test this, I sourced three large datasets from Kaggle: one containing over a million movies, another focused on revenue and ROI, and a third detailing cast members. My goal was to integrate these datasets to uncover whether star power truly influences profitability.
+The entertainment industry spends billions annually on celebrity salaries, operating under the assumption that star power drives box office success. Yet this assumption warrants empirical scrutiny: do expensive movie stars actually deliver higher returns on investment, or do other factors matter more?
 
----
+This project investigates a fundamental business question: **Are movie stars worth their premium salaries?** Using data mining techniques, I analyzed whether star power—measured as cast members' historical ROI performance—predicts a film's financial success better than competing factors such as budget discipline, release timing, genre, and franchise status.
 
-### Data Quality Challenges
+### Dataset Description
 
-The initial analysis revealed significant data integrity issues that threatened to distort results.
+The analysis draws from three Kaggle datasets merged into a unified dataset of 5,311 movies spanning 1915 to 2017. The combined data represents $485.6 billion in total revenue and $167.2 billion in production budgets.
 
-**Budget Inaccuracies:**
-For example, Robert Downey Jr. appeared in the 1987 movie "Less Than Zero" where the dataset showed a \$1 budget (actual budget was \$8 million) with \$20 million in revenue, making the ROI appear abnormally high. Many smaller films lacked any budget information, making comparisons unreliable.
+**Key Variables:**
 
-**Incomplete Cost and Revenue Data:**
-Some budgets excluded marketing expenses, which can match or exceed production costs. Revenue often reflected only theatrical sales, ignoring merchandise or streaming income, which is important for franchises like Marvel.
+| Variable | Description | Type |
+|----------|-------------|------|
+| `roi` | Return on Investment: (Revenue - Budget) / Budget * 100 | Target (continuous) |
+| `cast_avg_roi` | Average historical ROI of a film's cast members | Predictor (continuous) |
+| `budget` | Production budget in USD | Predictor (continuous) |
+| `budget_micro` | Binary flag for micro-budget films (<$1M) | Predictor (binary) |
+| `revenue` | Total box office revenue in USD | Excluded (target leakage) |
+| `vote_average` | Audience rating (0-10 scale) | Predictor (continuous) |
+| `vote_count` | Number of user votes/ratings | Predictor (continuous) |
+| `runtime` | Film length in minutes | Predictor (continuous) |
+| `is_franchise` | Whether the film is part of a franchise | Predictor (binary) |
+| `num_top_actors` | Count of high-profile actors in cast | Predictor (integer) |
+| `release_month` | Month of theatrical release | Predictor (categorical) |
+| `star_tier` | Categorization: Superstar, A-list, B-list, Unknown | Predictor (categorical) |
 
-**Actor Compensation Gaps:**
-Data on actor salaries is difficult to obtain. Compensation structures vary widely, including bonuses, profit-sharing, and backend revenue. These hidden variables complicated attempts to quantify “cost versus return” for specific stars.
+The dataset contains 60 total features after engineering, including genre indicators, release year bins, and budget categories.
 
----
-
-### Methodology
-
-To overcome missing or inconsistent salary data, I focused on **budget-relative ROI** as a measure of success:
-
-$$
-ROI = \frac {Revenue - Budget}{Budget} \times 100
-$$
-
-This ratio allowed meaningful comparisons across both low- and high-budget productions. For instance:
-
-* A \$150M movie earning \$112.5M has an ROI of –25%.
-* A \$10M film earning \$50M has an ROI of 400%.
-
-This normalized success across production sizes and time periods.
+**Important Limitation:** Only 640 movies (12%) contain complete historical ROI data for cast members, representing the subset where star power analysis is most reliable.
 
 ---
 
-### Findings and Statistical Results
+## Justification of Approach
 
-After cleaning and merging data, I analyzed **5,311 movies (1915–2017)** with full financial records.
+I selected a two-pronged analytical approach combining traditional statistical methods with machine learning, chosen specifically because of the research question's complexity.
 
-**Overall Results:**
+### Statistical Methods Justification
 
-* Total revenue: $485.6B
-* Total budget: $167.2B
-* Mean ROI: 343.9%
-* Median ROI: 106.7%
+**Correlation Analysis** was selected to measure the linear relationship between star power (`cast_avg_roi`) and film ROI. Pearson correlation provides a standardized measure (-1 to +1) that quantifies relationship strength without assuming causation.
 
-**Key Outcome:** Star power accounted for **85.05%** of ROI prediction in machine learning models, far exceeding other variables.
+**ANOVA (Analysis of Variance)** was used to compare mean ROI across star tiers (Superstar, A-list, B-list, Unknown). ANOVA is appropriate when comparing means across multiple categorical groups, testing whether observed differences exceed what random chance would produce.
 
-* Correlation between cast ROI and movie ROI: **r = 0.441 (p < 0.001)**
-* A-list films: 458.2% average ROI
-* Non-A-list films: 337.2% average ROI
-* Difference: **+121 percentage points (p = 0.024)**
+**Independent T-Test** compared top-tier stars (A-list and Superstar combined) against all other films. This binary comparison directly addresses whether premium talent delivers measurably different returns. Cohen's d effect size was calculated to assess practical significance beyond statistical significance.
 
-Other factors—budget, release timing, and genre. Each contributed less than 4% to the ROI prediction.
+### Machine Learning Justification
 
-| Star Tier             | Avg ROI | Movie Count | % of Total |
-| --------------------- | ------- | ----------- | ---------- |
-| Superstar (300%+)     | 788.5%  | 124         | 2.3%       |
-| A-list (150–300%)     | 215.8%  | 169         | 3.2%       |
-| B-list (50–150%)      | 62.6%   | 225         | 4.2%       |
-| Unknown/C-list (<50%) | 350.1%  | 4,793       | 90.2%      |
+Six regression models were trained to predict ROI from pre-release features:
 
----
+1. **Linear Regression** - Baseline model assuming linear relationships
+2. **Ridge Regression** - L2 regularization to handle multicollinearity among features
+3. **Lasso Regression** - L1 regularization for automatic feature selection
+4. **Random Forest** - Ensemble method capturing non-linear interactions
+5. **Gradient Boosting** - Sequential ensemble for complex patterns
+6. **XGBoost** - Optimized gradient boosting with regularization
 
-### Why Star Power Matters
+This ensemble approach was chosen because (a) no single algorithm consistently outperforms others across all datasets, and (b) comparing models provides confidence in findings—if multiple models agree that star power ranks low in importance, the conclusion is robust.
 
-Analysis suggests stars influence success through several mechanisms:
-
-* **Risk Mitigation:** Recognizable actors reassure investors and executives.
-* **Marketing Efficiency:** Established stars reduce advertising costs.
-* **Cross-Media Presence:** Many stars carry fan bases from television or social media.
-* **Career Trajectories:** Early hits elevate actors, compounding future ROI potential.
+**Train-Test Split:** 80/20 split with cross-validation ensured models generalize to unseen data rather than memorizing training examples.
 
 ---
 
-### Case Studies
+## Data Preparation and Quality
 
-**Robert Downey Jr. – *Iron Man (2008)*:**
-Budget \$140M, revenue \$585M (ROI 318%). RDJ’s \$600K salary evolved into \$75M per film post-success, proving how a single breakout role can generate immense career and studio returns.
+Raw data contained significant quality issues requiring systematic cleaning.
 
-**Robin Williams – *Mrs. Doubtfire (1993)*:**
-Budget \$25M, revenue \$441M (ROI 1,665%). Williams’s average ROI across films (504%) demonstrates peak star profitability.
+### Outlier Handling
 
-**The Hangover (2009):**
-Despite an unknown cast, the film achieved 1,234% ROI on a $35M budget. This is an exception proving that great scripts and timing can sometimes offset lack of star power.
+The dataset contained 52 movies with budgets under $1,000, including some listed at $1. These data errors produced mathematically absurd ROI values exceeding 1 billion percent. Such outliers would dominate statistical measures and distort model training.
 
-**Red One (2024):**
-Even with Dwayne Johnson and Chris Evans, the film underperformed ROI (–25.6%), underscoring that celebrity alone cannot rescue weak storytelling.
+**Solution:** Movies with budgets below $1,000 were removed. ROI values were capped at the 99th percentile (6,620.4%) to ensure analysis reflected realistic business scenarios while retaining legitimate high-performers.
 
-**Argylle (2024):**
-Despite an ensemble cast, ROI was (–55.8%), showing diminishing returns when high costs meet poor narrative reception.
+### Missing Data
 
----
+Cast financial history was unavailable for 88% of films (4,671 movies). Rather than imputation—which would introduce artificial patterns—the star power analysis focuses on the 640-movie subset with complete data. This represents films where detailed casting records were preserved, likely higher-profile productions where star power would matter most.
 
-### Data Limitations
+### Feature Engineering
 
-The absence of cast data for major franchises like the Marvel Cinematic Universe weakened coverage.
-
-* 88% of total films lacked cast ROI data.
-* Notable omissions: *Iron Man*, *The Avengers*, *Deadpool*.
-
-This likely means the 85% feature-importance estimate for star power is conservative.
-More access to datasets like IMDB Pro or verified compensation databases could refine results further.
+Star tiers were created based on `cast_avg_roi`:
+- **Superstar:** >300% historical ROI (124 movies, 2.3%)
+- **A-list:** 150-300% historical ROI (169 movies, 3.2%)
+- **B-list:** 50-150% historical ROI (225 movies, 4.2%)
+- **Unknown/C-list:** <50% or missing data (4,793 movies, 90.2%)
 
 ---
 
-### Conclusions
+## Results
 
-The evidence strongly supports that **movie stars justify their pay premiums.**
+### Statistical Findings
 
-* Cast ROI explained 85% of profitability prediction.
-* A-list involvement added 121 percentage points to ROI.
-* Budget and release timing effects were marginal.
+**Correlation Analysis** revealed that star power has a weak positive correlation with ROI (r = 0.078, p < 0.001). This correlation coefficient indicates that `cast_avg_roi` explains only 0.61% of variance in film ROI (r-squared = 0.006). By comparison, `vote_average` showed stronger correlation (r = 0.171), while `budget` showed negative correlation (r = -0.135), suggesting higher budgets tend to reduce ROI percentage.
 
-However, star power cannot compensate for poor scripts or misaligned concepts. High salaries increase downside risk if the film fails.
+**ANOVA Results** showed statistically significant differences across star tiers (F = 19.1, p < 0.001):
+- Superstar films: 788.5% mean ROI
+- A-list films: 215.8% mean ROI
+- B-list films: 62.6% mean ROI
+- Unknown/C-list films: 350.1% mean ROI
 
----
+The paradoxically high Unknown category ROI is explained by micro-budget films: a $10,000 production earning $1 million generates 10,000% ROI, inflating this category's average.
 
-### Recommendations
+**T-Test Results** comparing top-tier stars against others found a difference of +121% ROI (t = 2.25, p = 0.024). However, Cohen's d = 0.14 indicates negligible effect size—the distributions overlap substantially, meaning stars do not guarantee higher returns despite the average difference.
 
-**For Studio Executives:**
+### Machine Learning Findings
 
-* Prioritize proven stars (300%+ historical ROI).
-* Combine strong stories with recognizable talent.
+**Critical Methodological Correction:** Initial models achieved R-squared of 93.2% with star power dominating feature importance. Upon review, I discovered **target leakage**—the model included `revenue` as a predictor. Since ROI = (Revenue - Budget) / Budget, using revenue to predict ROI constitutes circular logic.
 
-**For Producers:**
+After removing revenue and retraining all models, XGBoost achieved the best performance with R-squared = 33.7%. The corrected feature importance rankings:
 
-* Allocate budgets strategically; stars first, production second.
-* Avoid overreliance on star names when scripts are weak.
+| Rank | Feature | Importance |
+|------|---------|------------|
+| 1 | budget_micro | 30.4% |
+| 2 | runtime_long | 8.2% |
+| 3 | vote_count | 5.3% |
+| 4 | num_top_actors | 5.0% |
+| 5 | is_franchise | 4.7% |
+| ... | ... | ... |
+| 29 | cast_avg_roi | 1.12% |
 
-**For Investors:**
-
-* Focus on A-list or Superstar tier projects.
-* Seek optimal release windows for maximum ROI.
-
----
-
-### Future Research
-
-Enhanced datasets could explore:
-
-* 2008–2024 MCU and streaming-era films.
-* Verified actor pay scales.
-* Marketing cost breakdowns and merchandise revenue.
-* Social media followers could count as an emerging star power proxy.
+Budget category emerged as the dominant predictor at 30.4% importance—approximately **27 times more important** than star power's 1.12%.
 
 ---
 
-### Final Summary
+## Discussion
 
-Across 5,311 films analyzed with machine learning and statistical tests (ANOVA F = 19.1, t = 2.25, R² = 93.2%), the conclusion is:
+The convergence of statistical and machine learning evidence supports a clear conclusion: **movie stars are not worth their premium salaries based on ROI data.**
 
-**Yes, movie stars are worth their pay premiums.**
+The weak correlation (r = 0.078) and low feature importance (1.12%, rank 29 of 51) indicate that star power has minimal predictive value for film profitability. While the t-test showed stars associated with +121% higher average ROI, the negligible effect size (d = 0.14) reveals this average is driven by outliers rather than consistent outperformance. High variance in star-driven films means premium talent provides no reliable return guarantee.
 
-Star power remains the strongest predictor of return on investment. When coupled with compelling storytelling and production execution.
+The finding that budget discipline ranks first (30.4% importance) aligns with industry observations: micro-budget productions like horror films or independent dramas require smaller returns to achieve profitability. A $2 million film earning $10 million represents 400% ROI, while a $200 million blockbuster earning $400 million achieves only 100% ROI despite generating far more absolute profit.
+
+**Limitations:** The 33.7% R-squared indicates that 66% of ROI variance remains unexplained by available features—likely driven by marketing spend, word-of-mouth, critical reception timing, and cultural factors not captured in the dataset. Additionally, the analysis uses pre-streaming era data (ending 2017), and the industry has transformed significantly since.
+
+---
+
+## Conclusion
+
+Across 5,311 films analyzed using six machine learning models and multiple statistical tests, the evidence demonstrates that movie stars do not justify their salary premiums based on return on investment.
+
+Budget discipline is 27 times more important than star power in predicting film ROI. Studios seeking to maximize returns should prioritize production cost management, franchise development, and audience engagement metrics over celebrity casting. The data suggests that talented unknown actors may offer better risk-adjusted returns than expensive A-list talent.
+
+Future research should incorporate marketing budgets, streaming platform data (Netflix, Disney+, etc.), and social media metrics to capture the full spectrum of factors driving modern film success.
+
+---
+
+*Word Count: ~1,450 words*

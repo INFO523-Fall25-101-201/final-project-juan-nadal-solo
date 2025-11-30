@@ -1,11 +1,10 @@
 ---
-title: "Predictive Analysis of Modern Movie Success"
-subtitle: "INFO 523 - Final Project"
+title: "Are Movie Stars Worth Their Premiums?"
+subtitle: "INFO 523 - Data Mining and Discovery - Final Project"
 author:
   - name: "Juan Nadal"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "A data-driven analysis investigating whether movie stars justify their pay premiums compared to other success factors like storytelling, release timing, and streaming platforms using 1M+ movies from TMDB and IMDb datasets."
 format:
    html:
     code-tools: true
@@ -14,18 +13,144 @@ format:
 editor: visual
 execute:
   warning: false
-  echo: false
+  echo: true
 jupyter: python3
 ---
 
-## Abstract
+```{python}
+#| label: setup
 
-This project investigates whether high-profile movie stars justify their substantial pay premiums or if other factors more significantly drive movie success. While the film industry traditionally relies on celebrity star power as a primary driver of box office performance, this analysis hypothesizes that movies often overinvest in expensive stars at the expense of equally or more important factors such as strong storytelling, strategic release timing, genre selection, and platform distribution.
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
 
-Using comprehensive datasets from The Movie Database (TMDB) and IMDb containing over 1 million movies with associated metadata including budgets, revenues, cast information, ratings, and release details, this study employs statistical analysis and predictive modeling to quantify the true impact of celebrity involvement on both financial and critical outcomes. The analysis compares star power against key variables including genre, release timing  to determine which features most strongly predict movie success.
+plt.style.use('seaborn-v0_8-whitegrid')
+sns.set_palette("husl")
 
-The project delivers three primary outputs:
+df = pd.read_csv('data/processed/full_dataset.csv')
+feature_importance = pd.read_csv('data/processed/feature_importance_fixed.csv')
+model_comparison = pd.read_csv('data/processed/model_comparison_fixed.csv')
 
-(1) Statistical validation testing whether star power is overrated compared to narrative quality, timing, and platform strategy;
-(2) A predictive model identifying the features that most reliably forecast movie success; and
-(3) Interactive visualizations revealing industry trends and the evolving economics of star power in the streaming era.
+total_movies = len(df)
+movies_with_cast_data = len(df[df['cast_avg_roi'] > 0])
+star_corr = df['cast_avg_roi'].corr(df['roi'])
+star_r_squared = star_corr ** 2
+
+star_power_rank = feature_importance[feature_importance['Feature'] == 'cast_avg_roi'].index[0] + 1
+star_power_imp = feature_importance[feature_importance['Feature'] == 'cast_avg_roi']['Importance'].values[0]
+budget_imp = feature_importance[feature_importance['Feature'] == 'budget_micro']['Importance'].values[0]
+
+alist_roi = df[df['star_tier'].isin(['Superstar', 'A-list'])]['roi']
+other_roi = df[~df['star_tier'].isin(['Superstar', 'A-list'])]['roi']
+t_stat, p_val = stats.ttest_ind(alist_roi, other_roi)
+pooled_std = np.sqrt(((len(alist_roi)-1)*alist_roi.std()**2 + (len(other_roi)-1)*other_roi.std()**2) / (len(alist_roi) + len(other_roi) - 2))
+cohens_d = (alist_roi.mean() - other_roi.mean()) / pooled_std
+
+best_model = model_comparison.loc[model_comparison['R2_Score'].idxmax()]
+```
+
+## Introduction
+
+The entertainment industry spends billions annually on celebrity salaries, assuming star power drives box office success. This project investigates: **Are movie stars worth their premium salaries?**
+
+Using data mining techniques, I analyzed whether star power—measured as cast members' historical ROI—predicts financial success better than factors like budget discipline, release timing, and franchise status.
+
+### Dataset
+
+The analysis uses three merged Kaggle datasets: `{python} f"{total_movies:,}"` movies spanning 1915-2017, representing $485.6 billion in revenue and $167.2 billion in budgets.
+
+**Key Variables:**
+
+| Variable | Description |
+|----------|-------------|
+| `roi` | Target: (Revenue - Budget) / Budget * 100 |
+| `cast_avg_roi` | Average historical ROI of cast members |
+| `budget_micro` | Binary flag for micro-budget films |
+| `vote_average` | Audience rating (0-10) |
+| `is_franchise` | Whether part of a franchise |
+| `star_tier` | Superstar, A-list, B-list, or Unknown |
+
+**Limitation:** Only `{python} movies_with_cast_data` movies (`{python} f"{movies_with_cast_data/total_movies*100:.0f}"`%) have complete cast ROI data.
+
+## Methodology
+
+I used a two-pronged approach: traditional statistics (correlation, ANOVA, t-test) and machine learning (6 regression models including XGBoost, Random Forest, and Lasso).
+
+**Why this approach?** Correlation measures linear relationships. ANOVA compares means across star tiers. The t-test directly compares premium talent vs. others. Machine learning captures non-linear patterns and ranks feature importance.
+
+Six models were compared to ensure robust findings—if multiple algorithms agree that star power ranks low, the conclusion is reliable.
+
+## Results
+
+### Statistical Evidence
+
+**Correlation:** Star power has a weak correlation with ROI (r = `{python} f"{star_corr:.3f}"`), explaining only `{python} f"{star_r_squared*100:.1f}"`% of variance.
+
+```{python}
+#| label: correlation-heatmap
+#| fig-cap: "Correlation Matrix"
+
+fig, ax = plt.subplots(figsize=(8, 6))
+corr_matrix = df[['roi', 'cast_avg_roi', 'budget', 'vote_average', 'vote_count']].corr()
+sns.heatmap(corr_matrix, annot=True, fmt='.3f', cmap='RdBu_r', center=0, square=True, ax=ax)
+plt.title('Correlation Matrix: ROI and Key Predictors', fontweight='bold')
+plt.tight_layout()
+plt.show()
+```
+
+**T-Test:** Top-tier stars (A-list + Superstar) show +`{python} f"{alist_roi.mean() - other_roi.mean():.0f}"`% higher average ROI than others. However, Cohen's d = `{python} f"{cohens_d:.2f}"` indicates negligible effect size—the distributions overlap heavily, meaning stars don't guarantee returns.
+
+```{python}
+#| label: star-tier-boxplot
+#| fig-cap: "ROI by Star Tier"
+
+fig, ax = plt.subplots(figsize=(8, 5))
+tier_order = ['Superstar', 'A-list', 'B-list', 'Unknown/C-list']
+sns.boxplot(data=df[df['star_tier'].isin(tier_order)], x='star_tier', y='roi', order=tier_order, ax=ax)
+ax.set_ylim(0, df['roi'].quantile(0.95))
+ax.set_xlabel('Star Tier')
+ax.set_ylabel('ROI (%)')
+ax.set_title('ROI Distribution by Star Tier', fontweight='bold')
+plt.tight_layout()
+plt.show()
+```
+
+### Machine Learning Evidence
+
+**Critical Correction:** Initial models showed 93.2% R-squared with star power dominating. I discovered target leakage—revenue was included as a predictor. Since ROI = (Revenue - Budget) / Budget, this was circular logic.
+
+After removing revenue, XGBoost achieved `{python} f"{best_model['R2_Score']*100:.1f}"`% R-squared. The corrected feature importance:
+
+```{python}
+#| label: feature-importance
+#| fig-cap: "Feature Importance (Top 15)"
+
+fig, ax = plt.subplots(figsize=(10, 6))
+top_features = feature_importance.head(15).iloc[::-1]
+colors = ['#e74c3c' if 'cast_avg_roi' in f else '#3498db' for f in top_features['Feature']]
+ax.barh(top_features['Feature'], top_features['Importance'] * 100, color=colors)
+ax.set_xlabel('Importance (%)')
+ax.set_title('Feature Importance (XGBoost, Revenue Excluded)', fontweight='bold')
+plt.tight_layout()
+plt.show()
+```
+
+**Key Finding:** Budget category ranks #1 at `{python} f"{budget_imp*100:.1f}"`% importance. Star power (`cast_avg_roi`) ranks #`{python} star_power_rank` at `{python} f"{star_power_imp*100:.2f}"`%. Budget is **`{python} f"{budget_imp/star_power_imp:.0f}"`x more important** than star power.
+
+## Discussion
+
+Both statistical and machine learning evidence converge: **movie stars are not worth their premiums based on ROI.**
+
+The weak correlation (r = `{python} f"{star_corr:.3f}"`) and low feature importance (`{python} f"{star_power_imp*100:.1f}"`%) show star power has minimal predictive value. While stars show higher average ROI, the negligible effect size (d = `{python} f"{cohens_d:.2f}"`) reveals this is driven by outliers, not consistent performance.
+
+Budget discipline ranking first aligns with industry reality: micro-budget films need smaller returns to profit. A $2M film earning $10M achieves 400% ROI, while a $200M blockbuster earning $400M achieves only 100%.
+
+**Limitations:** The `{python} f"{best_model['R2_Score']*100:.0f}"`% R-squared means `{python} f"{(1-best_model['R2_Score'])*100:.0f}"`% of variance is unexplained—likely marketing, word-of-mouth, and cultural timing. Data ends in 2017, before streaming transformed the industry.
+
+## Conclusion
+
+Across `{python} f"{total_movies:,}"` films, star power ranks #`{python} star_power_rank` of `{python} len(feature_importance)` features at `{python} f"{star_power_imp*100:.1f}"`% importance. Budget discipline is `{python} f"{budget_imp/star_power_imp:.0f}"`x more important.
+
+**Recommendation:** Studios should prioritize budget management, franchise development, and audience engagement over celebrity salaries. Unknown actors may offer better risk-adjusted returns than expensive A-list talent.
