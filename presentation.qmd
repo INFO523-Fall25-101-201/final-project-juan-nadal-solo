@@ -2,7 +2,7 @@
 title: "Are Movie Stars Worth Their Premiums?"
 subtitle: "INFO 523 - Data Mining and Discovery - Final Project"
 author: "Juan Nadal"
-institute: "[View Presentation Recording](https://drive.google.com/file/d/1SSftKouaSFc6OTQPVkvTa477m4PisKmm/view?usp=sharing)"
+institute: "[Click Here to View Presentation Recording](https://drive.google.com/file/d/1SSftKouaSFc6OTQPVkvTa477m4PisKmm/view?usp=sharing)"
 title-slide-attributes:
   data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
   data-background-size: stretch
