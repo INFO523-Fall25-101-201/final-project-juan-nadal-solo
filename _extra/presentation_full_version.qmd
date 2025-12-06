@@ -1,0 +1,357 @@
+---
+title: "Are Movie Stars Worth Their Premiums?"
+subtitle: "INFO 523 - Data Mining and Discovery - Final Project"
+author: "Juan Nadal"
+institute: "[Pending View Presentation Recording](https://drive.google.com/file/d/1SSftKouaSFc6OTQPVkvTa477m4)"
+title-slide-attributes:
+  data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
+  data-background-size: stretch
+  data-background-opacity: "0.7"
+  data-slide-number: none
+format:
+  revealjs:
+    theme: ['data/customtheming.scss']
+    transition: slide
+    slide-number: true
+editor: visual
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+---
+
+## Research Question {.smaller}
+
+**Do expensive movie stars justify their premiums?**
+
+::: columns
+::: {.column width="50%"}
+**Competing Factors:**
+
+-   Star power (cast historical ROI)
+-   Production budget
+-   Release timing
+-   Genre selection
+-   Franchise status
+:::
+
+::: {.column width="50%"}
+**Dataset:**
+
+-   5,311 movies (1915-2017)
+-   TMDB + IMDb sources
+-   Complete financial data
+-   60 features
+:::
+:::
+
+**Method:** Statistical analysis + Machine learning
+
+## The Answer {.center}
+
+
+### **NO**
+### (Stars are NOT worth their premiums)
+
+
+
+**Star power has minimal impact on ROI**
+
+::: {style="font-size: 0.85em;"}
+- Statistical correlation: r = 0.078 (weak, p < 0.001)
+- ML importance: **1.12%** (Rank #29 out of 51 features)
+- Effect size: Cohen's d = 0.14 (negligible)
+- Best model: XGBoost R² = 33.7% (without revenue)
+- Sample: 640 movies (12%) with complete cast financial data
+:::
+
+
+## Data Overview {.smaller}
+
+**Three Kaggle Datasets → 5,311 Movies**
+
+| Metric | Value |
+|--------|-------|
+| Total revenue analyzed | $485.6 billion |
+| Total budget analyzed | $167.2 billion |
+| Median ROI | 106.7% |
+| Date range | 1915-2017 |
+| Features | 60 |
+
+**Success Metric:** ROI = (Revenue - Budget) / Budget × 100
+
+## Data Quality & Outlier Handling {.smaller}
+
+**Challenge:** Raw dataset contained extreme outliers and data errors
+
+::: columns
+::: {.column width="50%"}
+**Issues Identified:**
+
+- **Budget errors:** 52 movies with budget < $1,000
+  - Example: Budget = $1, causing ROI > 1 billion%
+- **Extreme ROI outliers:** Max uncapped ROI = 1,239,638,200%
+- **Missing cast data:** 88% of movies (4,671)
+  - Only 640 movies (12%) have historical actor ROI
+:::
+
+::: {.column width="50%"}
+**Solutions Applied:**
+
+1. **Budget filter:** Removed movies < $1,000
+2. **ROI capping:** 99th percentile = 6,620.4%
+3. **Data validation:** Final dataset = 5,311 movies
+4. **Feature engineering:** Created star_tier, is_alist
+
+**Result:** Clean, analyzable dataset with realistic ROI values
+:::
+:::
+
+## Methodology {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Statistical Analysis:**
+
+- Correlation analysis (pandas.corr)
+- ANOVA: Star tier comparison
+- T-test: A-list vs non-A-list
+- Effect sizes (η², Cohen's d)
+- All p-values < 0.001
+:::
+
+::: {.column width="50%"}
+**Machine Learning:**
+
+- 6 models trained
+- Train/test split: 80/20
+- Best: XGBoost (33.7% R²)
+- Feature importance extraction
+- Cross-validation
+:::
+:::
+
+## Star Power Analysis {.smaller}
+
+![Top 20 Actors by ROI](images/analysis/viz_3_star_power.png)
+
+**Key Finding:** Actors with 300%+ historical ROI consistently deliver high returns
+
+## Statistical Evidence {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Correlation with ROI:**
+
+| Feature | Correlation |
+|---------|-------------|
+| **vote_average** | **0.171** |
+| revenue | 0.146 |
+| budget | -0.135 |
+| cast_avg_roi | 0.078 |
+| runtime | -0.029 |
+:::
+
+::: {.column width="50%"}
+![](images/analysis/correlation_matrix.png){width=100%}
+:::
+:::
+
+**Note:** Cast ROI correlation is 0.078 (weak linear relationship), and ML confirms this with low feature importance of 1.12% (rank #29)
+
+## ANOVA: Star Tiers {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Mean ROI by Star Category:**
+
+- Superstar (cast_avg_roi >300%): **788.5% ROI** (124 movies, 2.3%)
+- A-list (cast_avg_roi 150-300%): **215.8% ROI** (169 movies, 3.2%)
+- B-list (cast_avg_roi 50-150%): **62.6% ROI** (225 movies, 4.2%)
+- Unknown/C-list (cast_avg_roi <50%): **350.1% ROI** (4,793 movies, 90.2%)
+
+**F-statistic: 19.1, p < 0.001**
+:::
+
+::: {.column width="50%"}
+![](images/analysis/anova_star_tier_comparison.png){width=100%}
+:::
+:::
+
+::: {style="font-size: 0.85em; margin-top: 1em; padding: 0.5em; background-color: #fff3cd; border-left: 4px solid #ffc107;"}
+**Note:** The Unknown/C-list category's high ROI (350.1%) is misleading for two reasons: (1) It includes 88% of movies with missing cast data, and (2) It's heavily skewed by **micro-budget outliers** (e.g., a $10K film earning $1M = 10,000% ROI). This is NOT evidence that unknown actors perform better. Our star power analysis focuses on the 640 movies (12%) with complete cast financial data.
+:::
+
+## T-Test: Star Power Impact {.smaller}
+
+![](images/analysis/ttest_alist_comparison.png){width=90%}
+
+::: columns
+::: {.column width="50%"}
+**All Other Films:**
+- Mean ROI: 337.2%
+- Sample: 5,018 movies
+- (Includes B-list, C-list, & Unknown)
+
+**Top-Tier Stars (A-list + Superstar):**
+- Mean ROI: 458.2%
+- Sample: 293 movies
+- (cast_avg_roi >= 150%)
+:::
+
+::: {.column width="50%"}
+**Difference: +121.0% ROI**
+
+- T-statistic: 2.25
+- P-value: 0.024
+- Cohen's d: 0.14 (negligible effect size)
+
+**Why +121% is "negligible":**
+- **High variance** - distributions overlap heavily
+- Average driven by **outliers**, not consistency
+- Stars don't **guarantee** higher ROI
+- Predictability near zero (d=0.14)
+:::
+:::
+
+## Machine Learning Results {.smaller}
+
+**6 Models Trained (Revenue Excluded - Fixed):**
+
+| Model | R² Score |
+|-------|----------|
+| **XGBoost** | **33.7%** ✓ |
+| Lasso Regression | 31.5% |
+| Linear Regression | 31.5% |
+| Ridge Regression | 31.5% |
+| Gradient Boosting | 30.3% |
+| Random Forest | 29.9% |
+
+::: {style="font-size: 0.75em; margin-top: 1em; padding: 0.5em; background-color: #d1ecf1; border-left: 4px solid #0c5460;"}
+**Fixed:** Revenue excluded from features. R² dropped from 93.2% to 33.7% - the original high accuracy was due to target leakage.
+:::
+
+## Feature Importance {.smaller}
+
+![](images/analysis/feature_importance_fixed.png){width=80%}
+
+**Top 5 Features (ML Importance - Fixed):**
+1. **budget_micro: 30.4%** (Low budget category)
+2. **runtime_long: 8.2%** (Movie length)
+3. **vote_count: 5.3%** (Popularity)
+4. **num_top_actors: 5.0%** (Number of stars)
+5. **is_franchise: 4.7%** (Sequel status)
+
+**Star Power (cast_avg_roi): 1.12% - Rank #29**
+
+## Budget vs ROI {.smaller}
+
+![Star power vs budget comparison](images/analysis/star_power_vs_budget.png)
+
+- Budget correlation with ROI: r = -0.135 (weak negative)
+- Star power correlation: r = 0.078 (weak positive)
+- **Implication:** Neither shows strong linear relationship, but ML reveals complex patterns
+
+## Release Timing {.smaller}
+
+![Seasonality patterns exist but aren't decisive](images/analysis/viz_2_seasonality.png)
+
+- June: Highest revenue ($153.8M avg)
+- But release month: Only 1.2% of prediction
+- **Implication:** WHEN matters less than WHO
+
+## Model Predictions {.smaller}
+
+**Hypothetical Scenarios:**
+
+| Scenario | Budget | Cast ROI | Predicted ROI | Profit |
+|----------|--------|----------|---------------|--------|
+| Summer Blockbuster | $100M | 300% | **66%** | $66M |
+| Low-Budget Horror | $2M | 50% | **31%** | $620K |
+| Holiday Animation | $75M | 200% | **62%** | $46.5M |
+
+**Key:** Same budget, different cast → 35% ROI difference
+
+::: {style="font-size: 0.75em; margin-top: 0.5em; padding: 0.5em; background-color: #fff3cd; border-left: 4px solid #ffc107;"}
+**Note:** ROI values corrected to use Net ROI formula: (Revenue - Budget) / Budget × 100
+:::
+
+## Practical Implications {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**What Actually Drives ROI:**
+
+1. **Low budgets** (30% importance)
+2. **Franchise status** (5% importance)
+3. **Movie length** (8% importance)
+4. **Audience engagement** (vote count)
+:::
+
+::: {.column width="50%"}
+**What Doesn't Drive ROI:**
+
+1. Star power (1.12% importance)
+2. High budgets (negative correlation)
+3. Number of top actors alone
+:::
+:::
+
+**Bottom Line:** Budget discipline first, quality content second, stars third (if at all)
+
+## Limitations & Future Work {.smaller}
+
+**Limitations:**
+- **Limited cast data:** Only 12% of movies (640) have complete actor ROI history
+- **Small effect size:** Cohen's d = 0.14 (negligible practical significance)
+- **Modest model accuracy:** Best R² = 33.7% (66% of variance unexplained)
+- Pre-streaming era data (1915-2017)
+- No marketing spend data
+- No social media metrics
+- Correlation ≠ causation
+
+**What We Fixed:**
+- ✓ Removed revenue feature (target leakage)
+- ✓ R² corrected from 93.2% to 33.7%
+- ✓ Feature importance accurately reflects pre-release predictors
+
+**Future Research:**
+- Add streaming platform data (Netflix, Disney+)
+- Include social media influence metrics
+- Test with 2020-2025 releases
+- Analyze marketing spend impact
+
+## Conclusion {.center}
+
+### **Stars Are NOT Worth Their Premiums**
+### **(based on ROI data)**
+
+
+**Statistical Evidence:**
+- Weak correlation (r = 0.078, p < 0.001)
+- Explains only 0.61% of variance
+- Negligible effect size (Cohen's d = 0.14)
+- Based on 640 movies (12%) with complete cast financial data
+
+**Machine Learning Evidence (Fixed):**
+- Star power: **1.12% importance (Rank #29 of 51)**
+- XGBoost R²: **33.7%** (after fixing target leakage)
+- Top factors: Budget category (30%), Runtime (8%), Popularity (5%)
+
+
+**Data-Driven Recommendation:** Focus on production quality, franchise potential, and budget management rather than celebrity salaries. Consider talented unknown actors over expensive stars.
+
+
+## Questions? {.center}
+
+**Repository:** github.com/INFO523-F25/final-project-juan-nadal-solo
+
+**Key Findings:**
+- 5,311 movies analyzed
+- Star power: 1.12% importance (Rank #29)
+- Budget category: 30% importance (Top factor)
+- Best model R²: 33.7%
+
+**Contact:** College of Information Science, University of Arizona
+
+Thank you!
