@@ -1,0 +1,154 @@
+Model,Feature,Importance
+XGBoost,budget,0.002694513648748398
+XGBoost,revenue,0.011180575005710125
+XGBoost,runtime,3.6114844448320582e-09
+XGBoost,vote_average,1.133201199543521e-09
+XGBoost,vote_count,2.747692917637323e-07
+XGBoost,popularity,1.903012331050391e-10
+XGBoost,release_year,1.2674747917884588e-09
+XGBoost,release_month,3.8633839183344065e-11
+XGBoost,release_quarter,0.0
+XGBoost,release_day_of_week,0.0
+XGBoost,is_summer,0.0
+XGBoost,is_holiday,0.0
+XGBoost,is_q1,0.0
+XGBoost,genre_drama,2.8004525781666345e-11
+XGBoost,genre_comedy,0.0
+XGBoost,genre_thriller,2.8585257424995625e-11
+XGBoost,genre_romance,0.0
+XGBoost,genre_action,0.0
+XGBoost,genre_horror,0.0
+XGBoost,genre_crime,0.0
+XGBoost,genre_documentary,0.0
+XGBoost,genre_adventure,0.0
+XGBoost,genre_science_fiction,0.0
+XGBoost,genre_family,0.0
+XGBoost,genre_mystery,0.0
+XGBoost,genre_fantasy,0.0
+XGBoost,genre_animation,0.0
+XGBoost,genre_foreign,0.0
+XGBoost,genre_count,0.0
+XGBoost,cast_avg_roi,0.986124575138092
+XGBoost,cast_avg_experience,0.0
+XGBoost,num_top_actors,3.088076322432798e-11
+XGBoost,is_franchise,0.0
+XGBoost,budget_log,0.0
+XGBoost,budget_micro,0.0
+XGBoost,budget_low,0.0
+XGBoost,budget_medium,0.0
+XGBoost,budget_high,0.0
+XGBoost,budget_blockbuster,0.0
+XGBoost,runtime_short,0.0
+XGBoost,runtime_standard,0.0
+XGBoost,runtime_long,0.0
+XGBoost,runtime_epic,0.0
+XGBoost,popularity_q1,0.0
+XGBoost,popularity_q2,0.0
+XGBoost,popularity_q3,0.0
+XGBoost,popularity_q4,0.0
+XGBoost,vote_count_log,0.0
+XGBoost,has_high_rating,0.0
+XGBoost,years_since_release,0.0
+XGBoost,is_recent,0.0
+Random Forest,budget,0.03713655407579376
+Random Forest,revenue,0.07617293051367605
+Random Forest,runtime,0.024155758871026767
+Random Forest,vote_average,0.013795703452773554
+Random Forest,vote_count,0.010771930957297081
+Random Forest,popularity,0.017218640748849955
+Random Forest,release_year,0.01957172411047157
+Random Forest,release_month,0.0007180328917338441
+Random Forest,release_quarter,0.005904462851496816
+Random Forest,release_day_of_week,0.00035384416047532543
+Random Forest,is_summer,1.5885362128097889e-06
+Random Forest,is_holiday,1.072732384024638e-08
+Random Forest,is_q1,0.00032982523680582626
+Random Forest,genre_drama,0.00023136745702718678
+Random Forest,genre_comedy,1.1149305797302133e-08
+Random Forest,genre_thriller,0.00011813234821881954
+Random Forest,genre_romance,0.00017985862979368817
+Random Forest,genre_action,0.00027537874238443437
+Random Forest,genre_horror,0.008602880529585051
+Random Forest,genre_crime,4.221315244109348e-10
+Random Forest,genre_documentary,0.0048489827382138554
+Random Forest,genre_adventure,9.94064408154875e-09
+Random Forest,genre_science_fiction,1.0193095275243405e-09
+Random Forest,genre_family,0.0010592280522907023
+Random Forest,genre_mystery,0.006678407638467229
+Random Forest,genre_fantasy,0.00035899718503596697
+Random Forest,genre_animation,1.0139595751164355e-09
+Random Forest,genre_foreign,7.092128737558872e-14
+Random Forest,genre_count,0.0006032923612751342
+Random Forest,cast_avg_roi,0.6222678434508113
+Random Forest,cast_avg_experience,0.0010344000865380892
+Random Forest,num_top_actors,4.342179509803477e-08
+Random Forest,is_franchise,0.006211467686877491
+Random Forest,budget_log,0.05700175747752314
+Random Forest,budget_micro,9.181380465688742e-05
+Random Forest,budget_low,8.415617068478312e-08
+Random Forest,budget_medium,5.540315691530391e-12
+Random Forest,budget_high,4.825980916640861e-10
+Random Forest,budget_blockbuster,1.506280812053049e-17
+Random Forest,runtime_short,0.0022082851841607803
+Random Forest,runtime_standard,0.0021988273002710285
+Random Forest,runtime_long,0.00031937679151596856
+Random Forest,runtime_epic,3.8780890177024234e-08
+Random Forest,popularity_q1,0.002716017901748527
+Random Forest,popularity_q2,4.640104680755085e-10
+Random Forest,popularity_q3,0.0016974165079065655
+Random Forest,popularity_q4,0.0007771711151835088
+Random Forest,vote_count_log,0.03921990710970056
+Random Forest,has_high_rating,1.6472689936492618e-09
+Random Forest,years_since_release,0.02169962653735228
+Random Forest,is_recent,0.013468363725829362
+Gradient Boosting,budget,0.004557508309724181
+Gradient Boosting,revenue,0.01364149641820929
+Gradient Boosting,runtime,0.002102311356489049
+Gradient Boosting,vote_average,4.7980235271590885e-09
+Gradient Boosting,vote_count,0.003340198766259007
+Gradient Boosting,popularity,0.004120416538623846
+Gradient Boosting,release_year,0.009526849640928184
+Gradient Boosting,release_month,3.3394527732447005e-09
+Gradient Boosting,release_quarter,1.204971529738599e-09
+Gradient Boosting,release_day_of_week,3.1445892886187663e-11
+Gradient Boosting,is_summer,1.0213185366945795e-11
+Gradient Boosting,is_holiday,2.2941612226214427e-15
+Gradient Boosting,is_q1,4.4452854813463695e-11
+Gradient Boosting,genre_drama,1.4823323674659698e-10
+Gradient Boosting,genre_comedy,1.5791404153364703e-12
+Gradient Boosting,genre_thriller,0.0
+Gradient Boosting,genre_romance,3.627382224468589e-12
+Gradient Boosting,genre_action,9.20520012509844e-12
+Gradient Boosting,genre_horror,0.0003944724910369052
+Gradient Boosting,genre_crime,1.5228550771772807e-10
+Gradient Boosting,genre_documentary,7.320591607989611e-11
+Gradient Boosting,genre_adventure,0.0
+Gradient Boosting,genre_science_fiction,5.412068535530357e-12
+Gradient Boosting,genre_family,0.0
+Gradient Boosting,genre_mystery,0.0
+Gradient Boosting,genre_fantasy,7.927206158504714e-12
+Gradient Boosting,genre_animation,0.0
+Gradient Boosting,genre_foreign,0.0
+Gradient Boosting,genre_count,3.1810104734455003e-09
+Gradient Boosting,cast_avg_roi,0.9432512466178491
+Gradient Boosting,cast_avg_experience,0.0
+Gradient Boosting,num_top_actors,1.6313546780672434e-09
+Gradient Boosting,is_franchise,0.0
+Gradient Boosting,budget_log,0.006538223551545079
+Gradient Boosting,budget_micro,0.0
+Gradient Boosting,budget_low,0.0
+Gradient Boosting,budget_medium,0.0
+Gradient Boosting,budget_high,3.1549283309696803e-16
+Gradient Boosting,budget_blockbuster,0.0
+Gradient Boosting,runtime_short,1.6426123681290241e-09
+Gradient Boosting,runtime_standard,3.139520169071577e-11
+Gradient Boosting,runtime_long,1.0703320614071352e-09
+Gradient Boosting,runtime_epic,0.0
+Gradient Boosting,popularity_q1,0.0
+Gradient Boosting,popularity_q2,0.0
+Gradient Boosting,popularity_q3,1.40318151137997e-11
+Gradient Boosting,popularity_q4,1.625856208280123e-09
+Gradient Boosting,vote_count_log,0.010807143012842448
+Gradient Boosting,has_high_rating,0.0
+Gradient Boosting,years_since_release,0.0006478130721389969
+Gradient Boosting,is_recent,0.001072301197723056
