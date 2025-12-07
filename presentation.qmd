@@ -169,7 +169,33 @@ execute:
 
 ## Feature Importance Visualization {.smaller}
 
-![XGBoost Feature Importance Rankings](images/analysis/feature_importance_fixed.png){width=90%}
+```{python}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load feature importance data
+feature_imp = pd.read_csv('data/processed/feature_importance_fixed.csv')
+
+# Get top 10 features (reduced from 15 to fit slide)
+top_10 = feature_imp.head(10)
+
+# Create horizontal bar chart
+fig, ax = plt.subplots(figsize=(9, 4))
+colors = ['#e74c3c' if 'cast_avg_roi' in f else '#3498db' for f in top_10['Feature']]
+ax.barh(range(len(top_10)), top_10['Importance'] * 100, color=colors)
+ax.set_yticks(range(len(top_10)))
+ax.set_yticklabels(top_10['Feature'], fontsize=10)
+ax.invert_yaxis()  # Largest at top
+ax.set_xlabel('Importance (%)', fontsize=11)
+ax.set_title('Feature Importance (XGBoost) - Top 10 Features', fontsize=12, fontweight='bold')
+ax.grid(axis='x', alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
 
 **Micro-budget films (budget < $1M) are 27× more important than star power**
 
