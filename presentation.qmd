@@ -1,7 +1,8 @@
 ---
-title: "Project title"
-subtitle: "INFO 523 - Summer 2025 - Final Project"
-author: "Author names"
+title: "Are Movie Stars Worth Their Premiums?"
+subtitle: "INFO 523 - Data Mining and Discovery - Final Project"
+author: "Juan Nadal"
+institute: "[View Presentation Recording](https://drive.google.com/file/d/1hKryF_B_xDDgZn3aX3ourBSx0Pt4xnvq/view?usp=drive_link)"
 title-slide-attributes:
   data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
   data-background-size: stretch
@@ -9,159 +10,261 @@ title-slide-attributes:
   data-slide-number: none
 format:
   revealjs:
-    theme:  ['data/customtheming.scss']
-  
+    theme: ['data/customtheming.scss']
+    transition: slide
+    slide-number: true
 editor: visual
 jupyter: python3
 execute:
   echo: false
+  warning: false
 ---
 
-```{python}
-#| label: load-packages
-#| include: false
+## Research Question {.smaller}
 
-# Load packages here
+**Do expensive movie stars justify their premiums?**
+
+::: columns
+::: {.column width="50%"}
+**Competing Factors:**
+
+-   Star power (cast historical ROI)
+-   Production budget
+-   Release timing
+-   Genre selection
+-   Franchise status
+:::
+
+::: {.column width="50%"}
+**Dataset:**
+
+-   5,311 movies (1915-2017)
+-   TMDB + IMDb sources
+-   Complete financial data
+-   60 features
+:::
+:::
+
+**Method:** Statistical analysis + Machine learning
+
+## The Answer {.center}
+
+
+### **NO**
+### (Stars are NOT worth their premiums)
+
+
+
+**Star power has minimal impact on ROI**
+
+::: {style="font-size: 0.85em;"}
+- Statistical correlation: r = 0.078 (weak, p < 0.001)
+  - **Explains only 0.6% of variance** (99.4% is other factors)
+- ML importance: **1.12%** (Rank #29 out of 51 features)
+- Effect size: Cohen's d = 0.14 (negligible)
+  - Stars occasionally win big, but don't **consistently** outperform
+- Best model: XGBoost R² = 33.7% (without revenue)
+- Sample: 640 movies (12%) with complete cast financial data
+:::
+
+
+## Data Overview {.smaller}
+
+**Three Kaggle Datasets → 5,311 Movies**
+
+| Metric | Value |
+|--------|-------|
+| Total revenue analyzed | $485.6 billion |
+| Total budget analyzed | $167.2 billion |
+| Median ROI | 106.7% |
+| Date range | 1915-2017 |
+| Features | 60 |
+
+**Success Metric:** ROI = (Revenue - Budget) / Budget × 100
+
+## Methodology {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Statistical Analysis:**
+
+- Correlation analysis (pandas.corr)
+- ANOVA: Star tier comparison
+- T-test: A-list vs non-A-list
+- Effect sizes (η², Cohen's d)
+- All p-values < 0.001
+:::
+
+::: {.column width="50%"}
+**Machine Learning:**
+
+- 6 models trained
+- Train/test split: 80/20
+- Best: XGBoost (33.7% R²)
+- Feature importance extraction
+- Cross-validation
+:::
+:::
+
+## Statistical Evidence {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Correlation with ROI:**
+
+| Feature | Correlation |
+|---------|-------------|
+| **vote_average** | **0.171** |
+| revenue | 0.146 |
+| budget | -0.135 |
+| cast_avg_roi | 0.078 |
+| runtime | -0.029 |
+:::
+
+::: {.column width="50%"}
+![](images/analysis/correlation_matrix.png){width=100%}
+:::
+:::
+
+**Note:** Cast ROI correlation is 0.078 explains only **0.6% of variance** in movie success. The other **99.4%** is driven by factors unrelated to star power. ML confirms: 1.12% importance (rank #29)
+
+## Machine Learning Evidence {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**6 Models Trained:**
+
+| Model | R² Score |
+|-------|----------|
+| **XGBoost** | **33.7%** ✓ |
+| Lasso | 31.5% |
+| Linear | 31.5% |
+| Ridge | 31.5% |
+| Gradient Boost | 30.3% |
+| Random Forest | 29.9% |
+
+::: {style="font-size: 0.7em; margin-top: 0.5em; padding: 0.3em; background-color: #d1ecf1;"}
+**Fixed:** Revenue excluded (target leakage)
+:::
+:::
+
+::: {.column width="50%"}
+**Top 5 Features (XGBoost):**
+
+1. **budget_micro: 30.4%** (Low budget)
+2. **runtime_long: 8.2%** (Length)
+3. **vote_count: 5.3%** (Popularity)
+4. **num_top_actors: 5.0%** (# of stars)
+5. **is_franchise: 4.7%** (Sequel)
+
+**Star Power: 1.12% (Rank #29 of 51)**
+:::
+:::
+
+## Star Power: Top Actors by ROI {.smaller}
+
+![Top 20 Actors by Historical ROI](images/analysis/viz_3_star_power.png){width=85%}
+
+**Key Finding:** Even actors with 300%+ historical ROI don't guarantee movie success
+
+## Feature Importance Visualization {.smaller}
+
+```{python}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4
+
 import pandas as pd
-import seaborn as sns
-
-```
-
-```{python}
-#| label: setup
-#| include: false
-#| 
-# Set up plot theme and figure resolution
-sns.set_theme(style="whitegrid")
-sns.set_context("notebook", font_scale=1.1)
-
 import matplotlib.pyplot as plt
-plt.rcParams['figure.dpi'] = 300
-plt.rcParams['savefig.dpi'] = 300
-plt.rcParams['figure.figsize'] = (6, 6 * 0.618)
-```
 
-```{python}
-#| label: load-data
-#| include: false
-# Load data in Python
-mtcars = sns.load_dataset('mpg').dropna()  # mtcars dataset is similar to the mpg dataset from seaborn
-mtcars['speed'] = mtcars['horsepower'] / mtcars['weight']
+# Load feature importance data
+feature_imp = pd.read_csv('data/processed/feature_importance_fixed.csv')
 
-penguins = sns.load_dataset('penguins').dropna()
-```
+# Get top 10 features (reduced from 15 to fit slide)
+top_10 = feature_imp.head(10)
 
-# Using Quarto for presentations
-
-## Quarto
-
--   The presentation is created using the Quarto CLI
-
--   `##` sets the start of a new slide
-
-## Layouts
-
-You can use plain text
-
-::: columns
-::: {.column width="40%"}
--   or bullet points[^1]
-:::
-
-::: {.column width="60%"}
-or in two columns
-:::
-:::
-
-[^1]: And add footnotes
-
--   like
-
--   this
-
-## Code
-
-```{python}
-from sklearn.linear_model import LinearRegression
-import statsmodels.api as sm
-import pandas as pd
-
-# Fit a linear regression model
-X = mtcars[['speed']]
-y = mtcars['mpg']
-model = LinearRegression().fit(X, y)
-
-# Summary of the model
-X2 = sm.add_constant(X)
-est = sm.OLS(y, X2)
-est2 = est.fit()
-print(est2.summary())
-```
-
-## Plots
-
-```{python}
-penguins['species'] = penguins['species'].apply(lambda x: "Adelie" if x == "Adelie" else "Other")
-sns.scatterplot(data=penguins, x='flipper_length_mm', y='body_mass_g', hue='species')
+# Create horizontal bar chart
+fig, ax = plt.subplots(figsize=(9, 4))
+colors = ['#e74c3c' if 'cast_avg_roi' in f else '#3498db' for f in top_10['Feature']]
+ax.barh(range(len(top_10)), top_10['Importance'] * 100, color=colors)
+ax.set_yticks(range(len(top_10)))
+ax.set_yticklabels(top_10['Feature'], fontsize=10)
+ax.invert_yaxis()  # Largest at top
+ax.set_xlabel('Importance (%)', fontsize=11)
+ax.set_title('Feature Importance (XGBoost) - Top 10 Features', fontsize=12, fontweight='bold')
+ax.grid(axis='x', alpha=0.3)
+plt.tight_layout()
 plt.show()
 ```
 
-## Plot and text
+**Micro-budget films (budget < $1M) are 27× more important than star power**
+
+::: {style="font-size: 0.8em; margin-top: 0.5em;"}
+**Why micro-budget dominates:** Lower budgets = easier ROI wins
+
+- $5M film → $25M revenue = **400% ROI**
+- $200M film → $400M revenue = **100% ROI**
+:::
+
+## Practical Implications {.smaller}
 
 ::: columns
 ::: {.column width="50%"}
--   Some text
+**What Actually Drives ROI:**
 
--   goes here
+1. **Low budgets** (30% importance)
+2. **Franchise status** (5% importance)
+3. **Movie length** (8% importance)
+4. **Audience engagement** (vote count)
 :::
 
 ::: {.column width="50%"}
-```{python}
-#| warning: false
-#| fig.width: 5.5
-fig, ax = plt.subplots(figsize=(5.5, 5.5 * 0.618))
-sns.boxplot(data=penguins, x='bill_length_mm', y='species', hue='species', ax=ax)
-plt.show()
-```
+**What Doesn't Drive ROI:**
+
+1. Star power (1.12% importance)
+2. High budgets (negative correlation)
+3. Number of top actors alone
 :::
 :::
 
-# A new section...
+**Bottom Line:** Budget discipline first, quality content second, stars third (if at all)
 
-## Tables
+::: {style="font-size: 0.75em; margin-top: 0.8em; padding: 0.5em; background-color: #e8f4f8; border-left: 4px solid #3498db;"}
+**Proof in practice:** A24's strategy (low budgets + quality) consistently outperforms star-heavy blockbusters on ROI. *Hereditary*: $10M budget → $80M revenue = **700% ROI**
+:::
 
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
+## Conclusion {.center}
 
-```{python}
-penguins.head().to_html()
-```
+### **Stars Are NOT Worth Their Premiums**
+### **(based on ROI data)**
 
-## Images
+**Statistical Evidence:**
+- Weak correlation (r = 0.078, p < 0.001)
+- Explains only 0.61% of variance
+- Negligible effect size (Cohen's d = 0.14)
 
-![Image credit: Danielle Navarro, Percolate.](images/watercolour_sys02_img34_teacup-ocean.png){fig-align="center" width="500"}
+**Machine Learning Evidence:**
+- Star power: **1.12% importance (Rank #29 of 51)**
+- XGBoost R²: **33.7%**
+- Top factors: Budget category (30%), Runtime (8%), Popularity (5%)
 
-## Math Expressions {.smaller}
+**Data-Driven Recommendation:** Focus on production quality, franchise potential, and budget management rather than celebrity salaries.
 
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. \$\\alpha+\\beta\$ renders $\alpha + \beta$. You can use the display style with double dollar signs:
+::: {style="font-size: 0.7em; margin-top: 1em; padding: 0.4em; background-color: #f8f9fa; border-left: 3px solid #6c757d;"}
+**Limitations:** Only 12% of movies have complete cast data. Pre-streaming era (1915-2017). R² = 33.7% means 66% of variance unexplained.
+:::
 
-```         
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
 
-$$
-\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i
-$$
+## Questions? {.center}
 
-Limitations:
+**Repository:** github.com/INFO523-F25/final-project-juan-nadal-solo
 
-1.  The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
+**Key Findings:**
+- 5,311 movies analyzed
+- Star power: 1.12% importance (Rank #29)
+- Budget category: 30% importance (Top factor)
+- Best model R²: 33.7%
 
-2.  There should not be spaces after the opening `$` or before the closing `$`.
+**Contact:** College of Information Science, University of Arizona
 
-# Wrap up
-
-## Feeling adventurous?
-
--   You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
--   But some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs.
+Thank you!
