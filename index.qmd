@@ -89,7 +89,7 @@ Six models were compared to ensure robust findings if multiple algorithms agree 
 
 ### Statistical Evidence
 
-**Statistical Evidence: Correlation Analysis:** Correlation measures the linear relationship between two variables, ranging from -1 (perfect negative relationship) to +1 (perfect positive relationship). Values near zero indicate no meaningful relationship.
+**Correlation Analysis:** Correlation measures the linear relationship between two variables, ranging from -1 (perfect negative relationship) to +1 (perfect positive relationship). Values near zero indicate no meaningful relationship.
 When I examined what factors correlate with ROI, the results challenged conventional industry thinking:
 
 | Feature | Correlation | Interpretation |
@@ -175,7 +175,7 @@ plt.show()
 
 To move beyond simple correlations, I trained six machine learning models to identify which factors best predict ROI. The top performer was XGBoost (Extreme Gradient Boosting), an algorithm that builds sequential decision trees to capture complex patterns that simpler statistics often miss.
 
-To ensure model validity, I excluded revenue-based variables to prevent target leakage. The final model achieved an R-squared of 33.7%, explaining roughly one-third of the variance in movie success.
+To ensure model validity, I excluded revenue-based variables to prevent target leakage. The final model achieved an R-squared of 33.7%, explaining roughly one-third of the variance in movie success. This moderate explanatory power reflects the inherent unpredictability of box-office performance factors, such as marketing spend, social media impact, critic reception at release, and cultural timing, which our dataset doesn't capture. Additionally, 88% of movies lack complete actor ROI histories, limiting the accuracy of star-power metrics. Movie ROI has high variance that no model can fully explain; even Hollywood studios with vast resources struggle to predict hits.
 
 The feature importance rankings quantified the disconnect between salary and value. Budget Discipline ranked as the #1 predictor (30.4% importance), while Star Power ranked 29th (1.12%). The data shows a 27-to-1 difference in impact, confirming that among the factors we can control, keeping budgets lean matters far more than who is on the poster.
 
