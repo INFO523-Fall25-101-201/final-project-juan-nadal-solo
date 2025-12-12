@@ -218,3 +218,7 @@ Across `{python} f"{total_movies:,}"` films, star power ranks 29 of `{python} le
 
 - [Data Preparation Notebook](notebooks/01_data_preparation.ipynb)
 - [Star Power Analysis Notebook](notebooks/02_star_power_analysis.ipynb)
+
+---
+
+**AI Disclaimer:** Claude Code and GitHub Copilot were used to assist with coding, correcting coding errors, and cleaning up writing to ensure consistency in the project.
